@@ -13,9 +13,10 @@ $(document).ready(function(){
         }
     }
     
+    $(".soundPack").html("Sound Pack: "+curSound);
+    
     reformat();
     $(window).resize(function(){
-        console.log("resize");
         reformat();
     });
     
@@ -25,11 +26,22 @@ $(document).ready(function(){
     });
     
     $(document).keydown(function(e){
-        //console.log(e.keyCode);
-        if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true")
-            combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
-        $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
-        $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
+        console.log(e.keyCode);
+        if(e.keyCode == 39){
+            curSound = 1;
+            $(".soundPack").html("Sound Pack: "+curSound);
+        }
+        else if(e.keyCode == 37){
+            curSound = 0;
+            $(".soundPack").html("Sound Pack: "+curSound);
+        }
+        else{
+            //console.log(e.keyCode);
+            if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true")
+                combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
+            $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
+            $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
+        }
     });
     $(document).keyup(function(e){
         if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true")
@@ -40,6 +52,7 @@ $(document).ready(function(){
 });
 
 function reformat(){
+    $(".buttons").css("margin", "0");
     $(".buttons").css("margin","0 "+(($("body").innerWidth()-$(".buttons").width())/2)+"px");
 }
 
