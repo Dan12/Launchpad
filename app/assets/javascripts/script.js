@@ -15,6 +15,7 @@ $(document).ready(function(){
     
     reformat();
     $(window).resize(function(){
+        console.log("resize");
         reformat();
     });
     
@@ -26,13 +27,13 @@ $(document).ready(function(){
     $(document).keydown(function(e){
         //console.log(e.keyCode);
         if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true")
-            sounds[keyPairs.indexOf(e.keyCode)].play();
+            combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
     });
     $(document).keyup(function(e){
         if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true")
-            sounds[keyPairs.indexOf(e.keyCode)].stop();
+            combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","true");
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color", $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" ? "lightgray" : "white");
     });
@@ -120,5 +121,9 @@ sounds1 = [
     new Howl({urls: ['/assets/chain4/d14.wav']}),
     new Howl({urls: ['/assets/chain4/d15.wav']}),
     ];
+    
+combSounds = [sounds, sounds1];
+
+curSound = 0;
     
 pressure = [16,17,18,19,20,21,22,23,24,26,28,30,32,34,38,42];
