@@ -1,42 +1,72 @@
+<!--guitar hero launchpad/DDR launchpad-->
 $(document).ready(function(){
 
-    for(var i = 0; i < sound1Srcs.length; i++){
-        sounds.push(null);
-    }
+    <!--for(var i = 0; i < sound1Srcs.length; i++){-->
+    <!--    sounds1.push(null);-->
+    <!--}-->
 
-    for(var i = 0; i < sound1Srcs.length; i++){
-        $.ajax({
-            type: "POST",
-            url: "/get_asset_path",
-            data: {file_name: sound1Srcs[i], sindex: i},
-            success: function(data, textStatus, jqXHR) {
-              //console.log(data);
-              // console.log(textStatus);
-              // console.log(jqXHR);
-              var tempi = parseInt(data.sindex);
-              sounds[tempi] = new Howl({urls: [data.asset_path]});
-              checkLoaded();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log("Error=" + errorThrown);
-            }
-          });
-    }
+    <!--for(var i = 0; i < sound1Srcs.length; i++){-->
+    <!--    $.ajax({-->
+    <!--        type: "POST",-->
+    <!--        url: "/get_asset_path",-->
+    <!--        data: {file_name: sound1Srcs[i], sindex: i, chain: 1},-->
+    <!--        success: function(data, textStatus, jqXHR) {-->
+    <!--          //console.log(data);-->
+    <!--          // console.log(textStatus);-->
+    <!--          // console.log(jqXHR);-->
+    <!--          var tempi = parseInt(data.sindex);-->
+    <!--          sounds1[tempi] = new Howl({urls: [data.asset_path]});-->
+    <!--          checkLoaded();-->
+    <!--        },-->
+    <!--        error: function(jqXHR, textStatus, errorThrown) {-->
+    <!--            console.log("Error=" + errorThrown);-->
+    <!--        }-->
+    <!--    });-->
+    <!--}-->
     
-    $(".soundPack").html("Loading Sounds. This should only take a few seconds");
+    loadSounds(sound1Srcs, sounds1, 1);
+    loadSounds(sound4Srcs, sounds4, 4);
     
     $(window).resize(function(){
         reformat();
     });
 });
 
-var numLoaded = 0;
+function loadSounds(srcArr, soundArr, chain){
+    for(var i = 0; i < srcArr.length; i++){
+        soundArr.push(null);
+    }
+
+    for(var i = 0; i < srcArr.length; i++){
+        if(srcArr[i] == ""){
+            checkLoaded();
+        }
+        else{
+            $.ajax({
+                type: "POST",
+                url: "/get_asset_path",
+                data: {file_name: srcArr[i], sindex: i, chain: chain},
+                success: function(data, textStatus, jqXHR) {
+                  //console.log(data);
+                  // console.log(textStatus);
+                  // console.log(jqXHR);
+                  var tempi = parseInt(data.sindex);
+                  soundArr[tempi] = new Howl({urls: [data.asset_path]});
+                  checkLoaded();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log("Error=" + errorThrown);
+                }
+            });
+        }
+    }
+}
 
 function checkLoaded(){
     numLoaded++;
-    if(numLoaded == 4*12){
-        console.log(sounds);
-        combSounds = [sounds, sounds1];
+    if(numLoaded == 4*12*numSoundPacks){
+        console.log(sounds1);
+        combSounds = [sounds1, sounds4];
         loadKeyboard();
     }
 }
@@ -46,8 +76,8 @@ function loadKeyboard(){
         $(".buttons").append('<div class="button-row"></div>');
         for(var j = 0; j < 12; j++){
             var press = false;
-            if(pressure.indexOf((i*12+j)) != -1)
-                press = true
+            if(pressures[0].indexOf((i*12+j)) != -1)
+                press = true;
             var str = String.fromCharCode(keyPairs[i*12+j]);
             if(keyPairs[i*12+j] == 13)
                 str = "\\n"
@@ -70,30 +100,45 @@ function loadKeyboard(){
         if(e.keyCode == 39){
             curSound = 1;
             $(".soundPack").html("Sound Pack: "+curSound);
+            switchSoundPack();
         }
         else if(e.keyCode == 37){
             curSound = 0;
             $(".soundPack").html("Sound Pack: "+curSound);
+            switchSoundPack();
         }
         else{
             //console.log(e.keyCode);
-            if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true")
+            if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
                 combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
             $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
             $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
         }
     });
     $(document).keyup(function(e){
-        if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true")
+        if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
             combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","true");
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color", $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" ? "lightgray" : "white");
     });
     
-    setTimeout(function(){
+    $("#play_button").click(function(){
         intro_loop = 0;
         intro();
-    },2000);
+    });
+    
+}
+
+function switchSoundPack(){
+    for(var i = 0; i < 4; i++){
+        for(var j = 0; j < 12; j++){
+            var press = false;
+            if(pressures[curSound].indexOf((i*12+j)) != -1)
+                press = true;
+            $('.button-'+(i*12+j)+'').attr("pressure", ""+press+"");
+            $('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
+        }
+    }
 }
 
 function intro(){
@@ -139,44 +184,32 @@ keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
             65,83,68,70,71,72,74,75,76,186,222,13,
             90,88,67,86,66,78,77,188,190,191,16,-1];
             
-sound1Srcs = ["c3","a0", "a1", "a2", "a3", "b0", "b1", "b2", "b3", "b3","d5", "d12",
-              "c1","c7", "a5", "a6", "a7", "b4", "b5", "b6", "b7", "d6","d4", "d8",
-              "c2","c5", "a9", "a10","a11","b8", "b9", "b10","b11","d5","d0", "d1",
-              "c6","a12","a13","a14","a15","b12","b13","b14","b15","d3","d2", "d1"];
+sound1Srcs = ["c1","a0", "a1", "a2", "a3", "b0", "b1", "b2", "b3", "b3","d8","d12",
+              "c3","c5", "a5", "a6", "a7", "b4", "b5", "b6", "b7", "d5","d6","d4",
+              "c2","c7", "a9", "a10","a11","b8", "b9", "b10","b11","d1","d0","d5",
+              "c6","a12","a13","a14","a15","b12","b13","b14","b15","d3","d2","d1"];
               
-sounds = [];
+pressure1 = [4,5,6,7,8,9,17,18,29,30,31,32,33,34,35,41,42];
 
-sounds1 = [
-    new Howl({urls: ['<%= asset_path('chain4/c0.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c1.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c2.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c3.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c12.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c13.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c14.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/c15.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d2.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d3.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d2.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d3.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d6.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d7.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d6.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d7.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d9.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d9.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d10.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d11.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d12.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d13.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d14.wav')%>']}),
-    new Howl({urls: ['<%= asset_path('chain4/d15.wav')%>']}),
-    ];
+sound4Srcs = ["c0", "c3", "a15","","",   "",   "",   "b15","","","","",
+              "c4", "c7", "",   "","",   "",   "d6", "d3", "","","","",
+              "c8", "c11","",   "","d12","d13","d14","d7", "","","","",
+              "c12","c15","",   "","d8", "d9", "d10","d11","","","",""];
+              
+pressure4 = [19];
+
+pressures = [pressure1, pressure4];
+              
+sounds1 = [];
+
+sounds4 = [];
     
 combSounds = [];
 
 curSound = 0;
-    
-pressure = [5,6,7,8,9,11,17,18,21,22,23,29,30,31,32,33,34,41,42];
 
 intro_loop = 0;
+
+numLoaded = 0;
+
+numSoundPacks = 2;

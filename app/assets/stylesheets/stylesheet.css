@@ -22,3 +22,11 @@ h1{
 .buttons{
     display:inline-block;
 }
+
+#play_button{
+    border-radius: 4px;
+    border: 1px solid black;
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+}

@@ -4,6 +4,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   def getAssetUrl
-    render :json => {"asset_path" => ActionController::Base.helpers.asset_path("chain1/#{params["file_name"]}.mp3"), "sindex" => params["sindex"]}
+    render :json => {"asset_path" => ActionController::Base.helpers.asset_path("chain#{params["chain"]}/#{params["file_name"]}.mp3"), "sindex" => params["sindex"]}
   end
 end
