@@ -106,7 +106,6 @@ function loadKeyboard(){
     
     $("#play_button").click(function(){
         if(song_playing){
-            clearInterval(songInterval);
             $("#play_button").html("Play");
             song_playing = false;
         }
@@ -149,7 +148,8 @@ function setupSongInterval(){
 function songInterval(){
     var stop = false;
     while(songIntro[indAt].p <= frame){
-        keyTap(songIntro[indAt].kc, songIntro[indAt].dn);
+        if(songIntro[indAt].kc != -1)
+            keyTap(songIntro[indAt].kc, songIntro[indAt].dn);
         indAt++;
         if(indAt >= songIntro.length){
             if(intro_loop > 6){
@@ -158,7 +158,7 @@ function songInterval(){
             }
             else{
                 indAt = 0;
-                frame = -250;
+                frame = -resolution;
                 intro_loop++;
             }
         }
@@ -166,7 +166,7 @@ function songInterval(){
     frame+=resolution;
     time+=resolution;
     diff = (new Date().getTime() - startTime) - time;
-    if(!stop)
+    if(!stop && song_playing)
         setTimeout(songInterval, (resolution - diff));
 }
 
@@ -245,5 +245,6 @@ songIntro = [{kc: 3, dn: 200, p: 0},
              {kc: 2, dn: 200, p: 800},
              {kc: 1, dn: 200, p: 950},
              {kc: 15, dn: 200, p: 950},
-             {kc: 16, dn: 200, p: 1350}
+             {kc: 16, dn: 200, p: 1350},
+             {kc: -1, dn: -1, p: 1550}
             ];
