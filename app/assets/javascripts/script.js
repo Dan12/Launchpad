@@ -65,8 +65,6 @@ function loadKeyboard(){
     
     $(".soundPack").html("Sound Pack: "+curSound);
     
-    reformat();
-    
     $(".button").click(function(){
        $(this).attr("pressure", $(this).attr("pressure") == "false" ? "true" : "false");
        $(this).css("background-color", $(this).attr("pressure") == "true" ? "lightgray" : "white");
@@ -115,6 +113,14 @@ function loadKeyboard(){
         }
     });
     
+        
+    setupEditor();
+    
+    reformat();
+    $("#editor_canvas").attr({"width": $(".buttons").width()+"px", "height": "250px"});
+    
+    edcWidth = parseInt($("#editor_canvas").attr("width"));
+    edcHeight = parseInt($("#editor_canvas").attr("height"));
 }
 
 function switchSoundPack(){
@@ -179,72 +185,7 @@ function keyTap(keycode, duration){
 
 function reformat(){
     $(".buttons").css("margin", "0");
-    $(".buttons").css("margin","0 "+(($("body").innerWidth()-$(".buttons").width())/2)+"px");
-}
-
-keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
-            81,87,69,82,84,89,85,73,79,80,219,221,
-            65,83,68,70,71,72,74,75,76,186,222,13,
-            90,88,67,86,66,78,77,188,190,191,16,-1];
-            
-sound1Srcs = ["c1","a0", "a1", "a2", "a3", "b0", "b1", "b2", "b3", "b3","d8","d12",
-              "c3","c5", "a5", "a6", "a7", "b4", "b5", "b6", "b7", "d5","d6","d4",
-              "c2","c7", "a9", "a10","a11","b8", "b9", "b10","b11","d1","d0","d5",
-              "c6","a12","a13","a14","a15","b12","b13","b14","b15","d3","d2","d1"];
-              
-pressure1 = [4,5,6,7,8,9,17,18,29,30,31,32,33,34,35,41,42];
-
-sound4Srcs = ["c0", "c3", "a15","","",   "",   "",   "b15","","","","",
-              "c4", "c7", "",   "","",   "",   "d6", "d3", "","","","",
-              "c8", "c11","",   "","d12","d13","d14","d7", "","","","",
-              "c12","c15","",   "","d8", "d9", "d10","d11","","","",""];
-              
-pressure4 = [19];
-
-sound2Srcs = ["a13","a14","a15","c2", "c3", "b0", "b1", "b2", "b3", "b3","d8","d12",
-              "c1", "",   "",   "c6", "c7", "b4", "b5", "b6", "b7", "d5","d6","d4",
-              "c5", "c8", "c9", "c10","c11","b8", "b9", "b10","b11","d1","d0","d5",
-              "",   "c12","c13","c14","c15","b12","b13","b14","b15","d3","d2","d1"];
-
-pressure2 = [5,6,7,8,9,17,18,29,30,31,32,33,34,35,41,42];
-
-pressures = [pressure1, pressure4, pressure2];
-              
-sounds1 = [];
-
-sounds4 = [];
-
-sounds2 = [];
+    $(".buttons").css("margin","0 "+(($("body").innerWidth()-$(".buttons").width()-30)/2)+"px");
     
-combSounds = [];
-
-curSound = 0;
-
-intro_loop = 0;
-
-song_playing = false;
-
-numLoaded = 0;
-
-numSoundPacks = 3;
-
-songTimeout = null;
-
-frame = 0;
-
-time = 0;
-
-resolution = 1;
-
-startTime = 0;
-
-songIntro = [{kc: 3, dn: 200, p: 0},
-             {kc: 15, dn: 200, p: 150},
-             {kc: 37, dn: 200, p: 150},
-             {kc: 16, dn: 200, p: 550},
-             {kc: 2, dn: 200, p: 800},
-             {kc: 1, dn: 200, p: 950},
-             {kc: 15, dn: 200, p: 950},
-             {kc: 16, dn: 200, p: 1350},
-             {kc: -1, dn: -1, p: 1550}
-            ];
+    $("#editor_canvas").css("margin", "10px "+(($("body").innerWidth()-$(".buttons").width()-30)/2)+"px");
+}

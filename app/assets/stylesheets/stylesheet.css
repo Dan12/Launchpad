@@ -23,16 +23,26 @@ h1{
     display:inline-block;
 }
 
-#play_button{
+#link{
+    padding: 10px 0;
+    display: inline-block;
+    width: 600px;
+}
+
+#editor_canvas{
+    border: 1px solid rgb(200,200,200);
+    background-color: rgb(100,100,100);
+}
+
+#editor_container{
+    display: none;
+}
+
+.click_button{
     border-radius: 4px;
     border: 1px solid black;
     cursor: pointer;
     font-size: 20px;
     display: inline-block;
-}
-
-#link{
-    padding: 10px 0;
-    display: inline-block;
-    width: 600px;
+    padding: 4px 8px;
 }
