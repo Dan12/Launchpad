@@ -1,31 +1,9 @@
 <!--guitar hero launchpad/DDR launchpad-->
 $(document).ready(function(){
-
-    <!--for(var i = 0; i < sound1Srcs.length; i++){-->
-    <!--    sounds1.push(null);-->
-    <!--}-->
-
-    <!--for(var i = 0; i < sound1Srcs.length; i++){-->
-    <!--    $.ajax({-->
-    <!--        type: "POST",-->
-    <!--        url: "/get_asset_path",-->
-    <!--        data: {file_name: sound1Srcs[i], sindex: i, chain: 1},-->
-    <!--        success: function(data, textStatus, jqXHR) {-->
-    <!--          //console.log(data);-->
-    <!--          // console.log(textStatus);-->
-    <!--          // console.log(jqXHR);-->
-    <!--          var tempi = parseInt(data.sindex);-->
-    <!--          sounds1[tempi] = new Howl({urls: [data.asset_path]});-->
-    <!--          checkLoaded();-->
-    <!--        },-->
-    <!--        error: function(jqXHR, textStatus, errorThrown) {-->
-    <!--            console.log("Error=" + errorThrown);-->
-    <!--        }-->
-    <!--    });-->
-    <!--}-->
     
     loadSounds(sound1Srcs, sounds1, 1);
     loadSounds(sound4Srcs, sounds4, 4);
+    loadSounds(sound2Srcs, sounds2, 2);
     
     $(window).resize(function(){
         reformat();
@@ -65,8 +43,7 @@ function loadSounds(srcArr, soundArr, chain){
 function checkLoaded(){
     numLoaded++;
     if(numLoaded == 4*12*numSoundPacks){
-        console.log(sounds1);
-        combSounds = [sounds1, sounds4];
+        combSounds = [sounds1, sounds4, sounds2];
         loadKeyboard();
     }
 }
@@ -104,6 +81,11 @@ function loadKeyboard(){
         }
         else if(e.keyCode == 37){
             curSound = 0;
+            $(".soundPack").html("Sound Pack: "+curSound);
+            switchSoundPack();
+        }
+        else if(e.keyCode == 38){
+            curSound = 2;
             $(".soundPack").html("Sound Pack: "+curSound);
             switchSoundPack();
         }
@@ -198,11 +180,20 @@ sound4Srcs = ["c0", "c3", "a15","","",   "",   "",   "b15","","","","",
               
 pressure4 = [19];
 
-pressures = [pressure1, pressure4];
+sound2Srcs = ["a13","a14","a15","c2", "c3", "b0", "b1", "b2", "b3", "b3","d8","d12",
+              "c1", "",   "",   "c6", "c7", "b4", "b5", "b6", "b7", "d5","d6","d4",
+              "c5", "c8", "c9", "c10","c11","b8", "b9", "b10","b11","d1","d0","d5",
+              "",   "c12","c13","c14","c15","b12","b13","b14","b15","d3","d2","d1"];
+
+pressure2 = [];
+
+pressures = [pressure1, pressure4, pressure2];
               
 sounds1 = [];
 
 sounds4 = [];
+
+sounds2 = [];
     
 combSounds = [];
 
@@ -212,4 +203,4 @@ intro_loop = 0;
 
 numLoaded = 0;
 
-numSoundPacks = 2;
+numSoundPacks = 3;
