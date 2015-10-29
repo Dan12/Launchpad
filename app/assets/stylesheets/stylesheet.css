@@ -30,3 +30,9 @@ h1{
     font-size: 20px;
     display: inline-block;
 }
+
+#link{
+    padding: 10px 0;
+    display: inline-block;
+    width: 600px;
+}
