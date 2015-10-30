@@ -58,6 +58,8 @@ function loadKeyboard(){
             var str = String.fromCharCode(keyPairs[i*12+j]);
             if(keyPairs[i*12+j] == 13)
                 str = "\\n"
+            if(keyPairs[i*12+j] == 16)
+                str = "\\s"
             $(".button-row:last").append('<div class="button button-'+(i*12+j)+'" pressure="'+press+'" released="true">'+str+'</div>');
             $('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
         }
@@ -121,6 +123,7 @@ function loadKeyboard(){
     
     edcWidth = parseInt($("#editor_canvas").attr("width"));
     edcHeight = parseInt($("#editor_canvas").attr("height"));
+    setupToolBar();
 }
 
 function switchSoundPack(){

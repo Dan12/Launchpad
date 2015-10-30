@@ -24,6 +24,19 @@ maxWidth = 2000;
 tickScale = 50;
 tickWidth = 100;
 
+//playback speed
+//1-scrub, 2-select, 3-paint, 4-move, 5-scale, 6-record, 7-play, 8-pause, 9-stop, 10-loop, 11-save, 12-load
+current_tool = 1;
+
+editor_tools = [];
+tool_names = ["scrub", "select", "paint", "move", "scale", "record", "play", "pause", "stop", "loop", "save", "load"]
+
+playback_speed = 1;
+
+elementOver = null;
+
+current_song = [];
+
 // main script variables
 keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
             81,87,69,82,84,89,85,73,79,80,219,221,
