@@ -19,19 +19,23 @@ cursor_at = 0;
 
 scrubbing_bar_height = 20;
 
-maxWidth = 2000;
+maxWidth = 20000;
 
-tickScale = 50;
-tickWidth = 100;
+tickScale = 250;
+tickScaleEx = [10, 1000];
+tickWidth = 50;
 
 //playback speed
 //1-scrub, 2-select, 3-paint, 4-move, 5-scale, 6-record, 7-play, 8-pause, 9-stop, 10-loop, 11-save, 12-load
-current_tool = 1;
+current_tool = 2;
 
 editor_tools = [];
 tool_names = ["scrub", "select", "paint", "move", "scale", "record", "play", "pause", "stop", "loop", "save", "load"]
 
 playback_speed = 1;
+playback_speedEx = [.1, 1.5];
+
+sliderWidth = 6;
 
 elementOver = null;
 

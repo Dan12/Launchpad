@@ -26,7 +26,10 @@ function setupMouseInputs(){
   });
   
   $("#toggle_editor_container").click(function(){
-    $("#editor_container").toggle("display", function(){drawLayout(); reformat();});
+    $("#editor_container").toggle("display", function(){
+      drawLayout(); reformat();
+      $("#toggle_editor_container").html($("#editor_container").css("display") == "none" ? "Open Editor" : "Close Editor");
+    });
   });
   
   $("#editor_canvas").mousemove(function(e){
@@ -104,7 +107,7 @@ function drawLayout(){
     edc.lineTo(cellWidth+tickdraw,-yOffset+edcHeight);
     edc.stroke();
     var numWrite = ""+tick;
-    edc.fillText(numWrite, tickdraw-numWrite.length*8+cellWidth, -yOffset+scrubbing_bar_height-4);
+    edc.fillText(numWrite, tickdraw-numWrite.length*8+cellWidth, -yOffset+scrubbing_bar_height-4, tickWidth);
     tick+=tickScale;
   }
   
@@ -130,9 +133,18 @@ function drawLayout(){
   });
   
   //playback speed
-  edc.fillStyle = "darkgray";
+  edc.fillStyle = "white";
+  if(editor_tools[0] != null)
+    edc.fillRect(-xOffset+mapValue(playback_speed, playback_speedEx[0], playback_speedEx[1], editor_tools[0].x, editor_tools[0].x+editor_tools[0].w, true)-sliderWidth/2, -yOffset+editor_tools[0].y, sliderWidth, editor_tools[0].h);
   edc.fillStyle = "black";
-  edc.fillText(""+playback_speed, -xOffset+edcWidth/9+4, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
+  edc.fillText(""+playback_speed, -xOffset+edcWidth/15, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
+  
+  //zoom
+  edc.fillStyle = "white";
+  if(editor_tools[1] != null)
+    edc.fillRect(-xOffset+mapValue(tickScale, tickScaleEx[0], tickScaleEx[1], editor_tools[1].x, editor_tools[1].x+editor_tools[1].w, true)-sliderWidth/2, -yOffset+editor_tools[1].y, sliderWidth, editor_tools[1].h);
+  edc.fillStyle = "black";
+  edc.fillText(""+tickScale, -xOffset+edcWidth/7+10, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
   
   drawOther();
 }
@@ -148,7 +160,19 @@ function drawOther(){
 }
 
 function setupToolBar(){
-  editor_tools.push({n: "playback speed", x: edcWidth/80, y: (edcHeight-toolbarHeight)+toolbarHeight/4, w: edcWidth/10, h: toolbarHeight/2});
+  editor_tools.push({n: "playback speed", x: edcWidth/80, y: (edcHeight-toolbarHeight)+toolbarHeight/4, w: edcWidth/20, h: toolbarHeight/2});
+  editor_tools.push({n: "zoom", x: edcWidth/10, y: (edcHeight-toolbarHeight)+toolbarHeight/4, w: edcWidth/20, h: toolbarHeight/2});
   for(var i = 0; i < tool_names.length; i++)
-    editor_tools.push({n: tool_names[i], x: edcWidth/9+(edcWidth/15)*(i+1), y: (edcHeight-toolbarHeight)+toolbarHeight/4, w: toolbarHeight/2, h: toolbarHeight/2});
+    editor_tools.push({n: tool_names[i], x: edcWidth/9+(edcWidth/15)*(i+1)+edcWidth/30, y: (edcHeight-toolbarHeight)+toolbarHeight/4, w: toolbarHeight/2, h: toolbarHeight/2});
+}
+
+function mapValue(x, in_min, in_max, out_min, out_max, c){
+  var ret = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  if(c){
+    if(ret > out_max)
+      ret = out_max;
+    if(ret < out_min)
+      ret = out_min;
+  }
+  return ret;
 }
