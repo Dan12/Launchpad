@@ -34,7 +34,6 @@ function kuRecordInput(kc){
       var e = current_song[i];
       if(e.kc == kc && e.dn.charAt(e.dn.length-1) == 't'){
         e.dn = (new Date().getTime())-parseFloat(e.dn);
-        console.log(current_song);
         break;
       }
     }
@@ -90,18 +89,42 @@ function playLoop(){
 }
 
 function playbackOffsetUpdate(){
-  if(cursor_at >= maxWidth){
+  if(cursor_at >= maxWidth && current_tool != 8){
     maxWidth+=recordResolution*2;
   }
 }
 
+function saveSong(){
+  $.ajax({
+    type: "POST",
+    url: "/create_song",
+    data: {song_data: current_song},
+    success: function(data, textStatus, jqXHR) {
+      // console.log(data);
+      // console.log(textStatus);
+      // console.log(jqXHR);
+      // console.log(data.data.song_data);
+      if(data.data.song_data == "null")
+        alert("Not Saved, try again");
+      else{
+        song_data = data.data.song_data;
+        drawLayout();
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log("Error=" + errorThrown);
+        alert("Not Saved, try again");
+    }
+  });
+}
+
 function toolFunctionManager(){
-  if(current_tool == 7 && recordStartTime == null){
+  if(current_tool == 7 && recordStartTime == null)
     startRecording();
-  }
-  if(current_tool == 8 && playingStartTime == null){
+  if(current_tool == 8 && playingStartTime == null)
     startPlaying();
-  }
+  if(current_tool == 12)
+    saveSong();
 }
 
 function toolMouseDownManager(mx, my){

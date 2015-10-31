@@ -85,7 +85,7 @@ function loadKeyboard(){
     });
     
     $(document).keydown(function(e){
-        console.log(e.keyCode);
+        //console.log(e.keyCode);
         if(e.keyCode == 39){
             curSound = 1;
             $(".soundPack").html("Sound Pack: "+curSound);
@@ -146,7 +146,6 @@ function switchSoundPack(){
 }
 
 function keyTap(keycode, duration){
-    console.log("yes,"+keycode+","+duration);
     $(document).trigger(jQuery.Event( 'keydown', { which: keycode, keyCode: keycode } ));
     setTimeout(function(){
         $(document).trigger(jQuery.Event( 'keyup', { which: keycode, keyCode: keycode } ));

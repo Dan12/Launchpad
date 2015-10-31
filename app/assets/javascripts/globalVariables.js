@@ -27,7 +27,7 @@ tickScaleEx = [10, 1000];
 tickWidth = 50;
 
 //playback speed and zoom
-//2-scrub, 3-select, 4-paint, 5-move, 6-scale, 7-record, 8-play, 9-pause, 10-stop, 12-loop, 13-save, 14-load
+//2-scrub, 3-select, 4-paint, 5-move, 6-scale, 7-record, 8-play, 9-pause, 10-stop, 11-loop, 12-save, 13-load
 current_tool = 2;
 
 editor_tools = [];
@@ -50,7 +50,7 @@ mouseDown = false;
 mouseX = 0;
 mouseY = 0;
 
-playingResolution = 50;
+playingResolution = 20;
 playingStartTime = null;
 
 // main script variables
