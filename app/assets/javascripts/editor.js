@@ -10,6 +10,9 @@ function setupEditor(){
 }
 
 function drawLayout(){
+  playbackOffsetUpdate();
+  checkOffsets();
+  
   //transform canvas
   edc.setTransform(1, 0, 0, 1, xOffset, yOffset);
   
@@ -22,14 +25,28 @@ function drawLayout(){
   edc.lineWidth = 1;
   
   //guide lines
-  for(var tickdraw = 0; tickdraw < ((maxWidth+1000)/tickScale)*tickWidth; tickdraw+=tickWidth){
+  for(var tickdraw = 0; tickdraw < ((maxWidth+2000)/tickScale)*tickWidth; tickdraw+=tickWidth){
     edc.beginPath();
     edc.moveTo(cellWidth+tickdraw,-yOffset+scrubbing_bar_height);
     edc.lineTo(cellWidth+tickdraw,-yOffset+edcHeight);
     edc.stroke();
   }
+  for(var i = 1; i < numButtons; i++){
+    edc.beginPath();
+    edc.moveTo(-xOffset+cellWidth, i*cellHeight);
+    edc.lineTo(-xOffset+edcWidth, i*cellHeight);
+    edc.stroke();
+  }
   
-  //scrubbing bar
+  edc.fillStyle = "orange";
+  edc.strokeStyle = "lightgray";
+  current_song.forEach(function(e, i, a){
+    var nRow = keyCodes.indexOf(e.kc);
+    edc.fillRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
+    edc.strokeRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2)
+  });
+  
+  //scrubbing bar below
   edc.lineWidth = 3;
   edc.strokeStyle = "blue";
   edc.beginPath();
@@ -47,7 +64,7 @@ function drawLayout(){
   for(var i = 1; i < numButtons; i++){
     edc.beginPath();
     edc.moveTo(-xOffset, i*cellHeight);
-    edc.lineTo(-xOffset+edcWidth, i*cellHeight);
+    edc.lineTo(-xOffset+cellWidth, i*cellHeight);
     edc.stroke();
     
     var drawString = String.fromCharCode(keyCodes[i]);
@@ -58,14 +75,14 @@ function drawLayout(){
     edc.fillText(drawString, -xOffset+4, (i+1)*cellHeight-4);
   }
   
-  //draw scrubbing bar
+  //draw scrubbing bar above
   edc.fillStyle = "lightgray";
   edc.fillRect(-xOffset, -yOffset, edcWidth, scrubbing_bar_height);
   
   edc.font = "12px arial";
   edc.fillStyle = "black";
   var tick = 0;
-  for(var tickdraw = 0; tickdraw < ((maxWidth+1000)/tickScale)*tickWidth; tickdraw+=tickWidth){
+  for(var tickdraw = 0; tickdraw < ((maxWidth+2000)/tickScale)*tickWidth; tickdraw+=tickWidth){
     edc.beginPath();
     edc.moveTo(cellWidth+tickdraw,-yOffset);
     edc.lineTo(cellWidth+tickdraw,-yOffset+scrubbing_bar_height);
@@ -117,10 +134,6 @@ function drawLayout(){
   edc.fillStyle = "black";
   edc.fillText(""+tickScale, -xOffset+edcWidth/6, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
   
-  drawOther();
-}
-
-function drawOther(){
   if(elementOver != null){
     edc.font = "16px arial";
     edc.fillStyle = "white";

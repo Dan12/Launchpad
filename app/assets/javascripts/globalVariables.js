@@ -15,8 +15,8 @@ numButtons = 51;
 
 toolbarHeight = 30;
 
+//in ms
 cursor_at = 0;
-current_time = 0;
 
 scrubbing_bar_height = 20;
 
@@ -42,8 +42,16 @@ elementOver = null;
 
 current_song = [];
 
-recordResolution = 20;
+recordResolution = 100;
 recordStartTime = null;
+
+mouseDown = false;
+
+mouseX = 0;
+mouseY = 0;
+
+playingResolution = 50;
+playingStartTime = null;
 
 // main script variables
 keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
@@ -84,31 +92,6 @@ combSounds = [];
 
 curSound = 0;
 
-intro_loop = 0;
-
-song_playing = false;
-
 numLoaded = 0;
 
 numSoundPacks = 3;
-
-songTimeout = null;
-
-frame = 0;
-
-time = 0;
-
-resolution = 1;
-
-startTime = 0;
-
-songIntro = [{kc: 3, dn: 200, p: 0},
-             {kc: 15, dn: 200, p: 150},
-             {kc: 37, dn: 200, p: 150},
-             {kc: 16, dn: 200, p: 550},
-             {kc: 2, dn: 200, p: 800},
-             {kc: 1, dn: 200, p: 950},
-             {kc: 15, dn: 200, p: 950},
-             {kc: 16, dn: 200, p: 1350},
-             {kc: -1, dn: -1, p: 1550}
-            ];

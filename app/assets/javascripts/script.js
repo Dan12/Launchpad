@@ -20,29 +20,40 @@ function loadSounds(srcArr, soundArr, chain){
             checkLoaded();
         }
         else{
-            $.ajax({
-                type: "POST",
-                url: "/get_asset_path",
-                data: {file_name: srcArr[i], sindex: i, chain: chain},
-                success: function(data, textStatus, jqXHR) {
-                  //console.log(data);
-                  // console.log(textStatus);
-                  // console.log(jqXHR);
-                  var tempi = parseInt(data.sindex);
-                  soundArr[tempi] = new Howl({urls: [data.asset_path]});
-                  checkLoaded();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log("Error=" + errorThrown);
-                    $(".soundPack").html("There was an error. Please Reload the page");
-                }
-            });
+            requestSound(i, srcArr, soundArr, chain);
         }
     }
 }
 
+function requestSound(i, srcArr, soundArr, chain){
+    setTimeout(function(){
+        $.ajax({
+            type: "POST",
+            url: "/get_asset_path",
+            data: {file_name: srcArr[i], sindex: i, chain: chain},
+            success: function(data, textStatus, jqXHR) {
+              //console.log(data);
+              // console.log(textStatus);
+              // console.log(jqXHR);
+              var tempi = parseInt(data.sindex);
+              soundArr[tempi] = new Howl({urls: [data.asset_path]});
+              checkLoaded();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log("Error=" + errorThrown);
+                //$(".soundPack").html("There was an error. Please Reload the page");
+                if(errorThrown == "Request Time-out")
+                    requestSound(i, srcArr, soundArr, chain);
+                else
+                    $("#error_msg").html("There was an error. Please reload the page");
+            }
+        });
+    },i*50);
+}
+
 function checkLoaded(){
     numLoaded++;
+    $(".soundPack").html("Loading sounds ("+numLoaded+"/"+(4*12*numSoundPacks)+"). This should only take a few seconds");
     if(numLoaded == 4*12*numSoundPacks){
         combSounds = [sounds1, sounds4, sounds2];
         loadKeyboard();
@@ -74,7 +85,7 @@ function loadKeyboard(){
     });
     
     $(document).keydown(function(e){
-        //console.log(e.keyCode);
+        console.log(e.keyCode);
         if(e.keyCode == 39){
             curSound = 1;
             $(".soundPack").html("Sound Pack: "+curSound);
@@ -111,17 +122,6 @@ function loadKeyboard(){
         kuRecordInput(e.keyCode); 
     });
     
-    $("#play_button").click(function(){
-        if(song_playing){
-            $("#play_button").html("Play");
-            song_playing = false;
-        }
-        else{
-            playSong();
-            $("#play_button").html("Pause");
-        }
-    });
-    
         
     setupEditor();
     
@@ -145,51 +145,11 @@ function switchSoundPack(){
     }
 }
 
-function playSong(){
-    setupSongInterval();
-}
-
-function setupSongInterval(){
-    frame = 0;
-    time = 0;
-    indAt = 0;
-    resolution = 50;
-    intro_loop = 0;
-    song_playing = true;
-    startTime = new Date().getTime();
-    
-    setTimeout(songInterval, resolution);
-}
-
-function songInterval(){
-    var stop = false;
-    while(songIntro[indAt].p <= frame){
-        if(songIntro[indAt].kc != -1)
-            keyTap(songIntro[indAt].kc, songIntro[indAt].dn);
-        indAt++;
-        if(indAt >= songIntro.length){
-            if(intro_loop > 6){
-            stop = true;
-                break;
-            }
-            else{
-                indAt = 0;
-                frame = -resolution;
-                intro_loop++;
-            }
-        }
-    }
-    frame+=resolution;
-    time+=resolution;
-    diff = (new Date().getTime() - startTime) - time;
-    if(!stop && song_playing)
-        setTimeout(songInterval, (resolution - diff));
-}
-
 function keyTap(keycode, duration){
-    $(document).trigger(jQuery.Event( 'keydown', { which: keyPairs[keycode], keyCode: keyPairs[keycode] } ));
+    console.log("yes,"+keycode+","+duration);
+    $(document).trigger(jQuery.Event( 'keydown', { which: keycode, keyCode: keycode } ));
     setTimeout(function(){
-        $(document).trigger(jQuery.Event( 'keyup', { which: keyPairs[keycode], keyCode: keyPairs[keycode] } ));
+        $(document).trigger(jQuery.Event( 'keyup', { which: keycode, keyCode: keycode } ));
     },duration);
 }
 
