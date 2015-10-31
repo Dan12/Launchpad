@@ -4,6 +4,7 @@ $(document).ready(function(){
     loadSounds(sound1Srcs, sounds1, 1);
     loadSounds(sound4Srcs, sounds4, 4);
     loadSounds(sound2Srcs, sounds2, 2);
+    loadSounds(sound3Srcs, sounds3, 3);
     
     $(window).resize(function(){
         reformat();
@@ -55,7 +56,7 @@ function checkLoaded(){
     numLoaded++;
     $(".soundPack").html("Loading sounds ("+numLoaded+"/"+(4*12*numSoundPacks)+"). This should only take a few seconds");
     if(numLoaded == 4*12*numSoundPacks){
-        combSounds = [sounds1, sounds4, sounds2];
+        combSounds = [sounds1, sounds4, sounds2, sounds3];
         loadKeyboard();
     }
 }
@@ -101,10 +102,27 @@ function loadKeyboard(){
             $(".soundPack").html("Sound Pack: "+curSound);
             switchSoundPack();
         }
+        else if(e.keyCode == 40){
+            curSound = 3;
+            $(".soundPack").html("Sound Pack: "+curSound);
+            switchSoundPack();
+        }
         else{
             //console.log(e.keyCode);
             if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null){
+                combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
                 combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
+                areas[curSound].forEach(function(el, ind, arr){
+                    for(var j = 0; j < el.length; j++){
+                        if(keyPairs.indexOf(e.keyCode) == el[j]){
+                            for(var k = 0; k < el.length; k++){
+                                if(k != j)
+                                    combSounds[curSound][el[k]].stop();
+                            }
+                            break;
+                        }
+                    }
+                });
                 kdRecordInput(e.keyCode);
             }
             $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");

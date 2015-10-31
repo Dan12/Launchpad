@@ -41,6 +41,7 @@ sliderWidth = 6;
 elementOver = null;
 
 current_song = [];
+loaded_song_id = -1;
 
 recordResolution = 100;
 recordStartTime = null;
@@ -52,6 +53,11 @@ mouseY = 0;
 
 playingResolution = 20;
 playingStartTime = null;
+
+selected = [];
+singleSelected = null;
+selectedPrevX = 0;
+selectedPrevY = 0;
 
 // main script variables
 keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
@@ -66,27 +72,46 @@ sound1Srcs = ["c1","a0", "a1", "a2", "a3", "b0", "b1", "b2", "b3", "b3","d8","d1
               
 pressure1 = [4,5,6,7,8,9,17,18,29,30,31,32,33,34,35,41,42];
 
+areas1 = [[0,12,13,24,25,36]];
+
 sound4Srcs = ["c0", "c3", "a15","","",   "",   "",   "b15","","","","",
               "c4", "c7", "",   "","",   "",   "d6", "d3", "","","","",
               "c8", "c11","",   "","d12","d13","d14","d7", "","","","",
               "c12","c15","",   "","d8", "d9", "d10","d11","","","",""];
               
-pressure4 = [19];
+pressure4 = [];
+
+areas4 = [[7,18,19,28,29,30,31,40,41,42,43]];
 
 sound2Srcs = ["a13","a14","a15","c2", "c3", "b0", "b1", "b2", "b3", "b3","d8","d12",
               "c1", "",   "",   "c6", "c7", "b4", "b5", "b6", "b7", "d5","d6","d4",
-              "c5", "c8", "c9", "c10","c11","b8", "b9", "b10","b11","d1","d0","d5",
+              "c5", "c8", "c9", "c10","c11","b8", "b9", "b10","b11","d1","d0","d15",
               "",   "c12","c13","c14","c15","b12","b13","b14","b15","d3","d2","d1"];
 
-pressure2 = [5,6,7,8,9,17,18,29,30,31,32,33,34,35,41,42];
+pressure2 = [5,6,7,8,9,17,18,29,30,31,33,34,41,42];
 
-pressures = [pressure1, pressure4, pressure2];
+areas2 = [[0,1,2,3,4,12,16,24,26,27,28,37,38,39,40]];
+
+sound3Srcs = ["a0", "","","","d0", "d1","d2", "d3", "","","","",
+              "",   "","","","d4", "d5","d6", "d7", "","","","",
+              "",   "","","","d8", "d9","d10","d11","","","","",
+              "a12","","","","d12","",  "d14","d15","","","",""];
+
+pressure3 = [];
+
+areas3 = [[4,5,6,7,16,17,18,19,28,29,30,31,40,42,43]];
+
+pressures = [pressure1, pressure4, pressure2, pressure3];
+
+areas = [areas1, areas4, areas2, areas3];
               
 sounds1 = [];
 
 sounds4 = [];
 
 sounds2 = [];
+
+sounds3 = [];
     
 combSounds = [];
 
@@ -94,4 +119,4 @@ curSound = 0;
 
 numLoaded = 0;
 
-numSoundPacks = 3;
+numSoundPacks = 4;

@@ -15,6 +15,8 @@ function movePlaybackSlider(mx, my){
       tickScale = Math.floor(tickScale/10);
       tickScale = tickScale*10;
     }
+    if(toPix(cursor_at)+xOffset > edcWidth-cellWidth || toPix(cursor_at)+xOffset < 0)
+      xOffset=edcWidth/2-toPix(cursor_at);
   }
 }
 
@@ -32,7 +34,7 @@ function kuRecordInput(kc){
   if(current_tool == 7 && keyCodes.indexOf(kc) != -1){
     for(var i = current_song.length-1; i >= 0; i--){
       var e = current_song[i];
-      if(e.kc == kc && e.dn.charAt(e.dn.length-1) == 't'){
+      if(e.kc == kc && (typeof e.dn == "string") && e.dn.charAt(e.dn.length-1) == 't'){
         e.dn = (new Date().getTime())-parseFloat(e.dn);
         break;
       }
@@ -40,9 +42,9 @@ function kuRecordInput(kc){
   }
 }
 
-function  kdRecordInputSwitch(kc){
-  if(kc == 37 || kc == 38 || kc == 39 || kc == 40)
-    current_song.push({kc: kc, dn: 50, p: current_time});
+function kdRecordInputSwitch(kc){
+  if((kc == 37 || kc == 38 || kc == 39 || kc == 40) && current_tool == 7)
+    current_song.push({kc: kc, dn: 50, p: (new Date().getTime()) - recordStartTime});
 }
 
 function recordLoop(){
@@ -82,7 +84,7 @@ function playLoop(){
   });
   drawLayout();
   diff = (new Date().getTime() - playingStartTime)-cursor_at;
-  if(current_tool == 8 && diff > -playingResolution)
+  if(current_tool == 8 && diff > -playingResolution && cursor_at < maxWidth)
     setTimeout(playLoop, (playingResolution - diff));
   else
     playingStartTime = null;
@@ -90,7 +92,7 @@ function playLoop(){
 
 function playbackOffsetUpdate(){
   if(cursor_at >= maxWidth && current_tool != 8){
-    maxWidth+=recordResolution*2;
+    maxWidth+=tickScale;
   }
 }
 
@@ -118,6 +120,46 @@ function saveSong(){
   });
 }
 
+function moveMouseDown(){
+  if(selected.length == 0){
+    current_song.forEach(function(e, i, a){
+      if(mouseX >= toPix(e.p)+xOffset && mouseX <= toPix(e.p)+xOffset+toPix(e.dn) && mouseY >= keyCodes.indexOf(e.kc)*cellHeight+yOffset && mouseY <= (keyCodes.indexOf(e.kc)+1)*cellHeight+yOffset){
+        singleSelected = e;
+      }
+    });
+  }
+  selectedPrevX = mouseX;
+  selectedPrevY = mouseY;
+}
+
+function moveMouseMove(){
+  if(mouseDown){
+    var rowdiff = 0;
+    if(Math.floor((selectedPrevY-xOffset)/cellHeight) != Math.floor((mouseY-xOffset)/cellHeight))
+      rowdiff = Math.floor((mouseY-xOffset)/cellHeight)-Math.floor((selectedPrevY-xOffset)/cellHeight);
+    var tdiff = toMs(mouseX-selectedPrevX);
+    if(singleSelected != null){
+      var newind = keyCodes.indexOf(singleSelected.kc)+rowdiff;
+      if(newind >= 0 && newind < keyCodes.length)
+        singleSelected.kc = keyCodes[newind];
+      singleSelected.p+=tdiff;
+      if(singleSelected.p < 0)
+        singleSelected.p = 0;
+      if(singleSelected.p > maxWidth)
+        maxWidth+=tickScale;
+    }
+    selected.forEach(function(e, i, a){
+      
+    });
+  }
+  selectedPrevX = mouseX;
+  selectedPrevY = mouseY;
+}
+
+function moveMouseUp(){
+  singleSelected = null;
+}
+
 function toolFunctionManager(){
   if(current_tool == 7 && recordStartTime == null)
     startRecording();
@@ -130,15 +172,20 @@ function toolFunctionManager(){
 function toolMouseDownManager(mx, my){
   if(current_tool == 2)
     scrub(mx, my);
+  if(current_tool == 5)
+    moveMouseDown();
 }
 
 function toolMouseUpManager(mx, my){
-  
+  if(current_tool == 5)
+    moveMouseUp();
 }
 
 function toolMouseMoveManager(mx, my){
   if(current_tool == 2 && mouseDown)
     scrub(mx, my);
+  if(current_tool == 5)
+    moveMouseMove();
 }
 
 function toolOffsetManager(mx, my){
