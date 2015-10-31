@@ -34,6 +34,7 @@ function loadSounds(srcArr, soundArr, chain){
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log("Error=" + errorThrown);
+                    $(".soundPack").html("There was an error. Please Reload the page");
                 }
             });
         }
@@ -91,17 +92,23 @@ function loadKeyboard(){
         }
         else{
             //console.log(e.keyCode);
-            if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
+            if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null){
                 combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
+                kdRecordInput(e.keyCode);
+            }
             $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
             $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
         }
+        
+        kdRecordInputSwitch(e.keyCode);
     });
     $(document).keyup(function(e){
         if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
             combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","true");
         $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color", $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" ? "lightgray" : "white");
+    
+        kuRecordInput(e.keyCode); 
     });
     
     $("#play_button").click(function(){

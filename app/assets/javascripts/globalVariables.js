@@ -16,6 +16,7 @@ numButtons = 51;
 toolbarHeight = 30;
 
 cursor_at = 0;
+current_time = 0;
 
 scrubbing_bar_height = 20;
 
@@ -25,8 +26,8 @@ tickScale = 250;
 tickScaleEx = [10, 1000];
 tickWidth = 50;
 
-//playback speed
-//1-scrub, 2-select, 3-paint, 4-move, 5-scale, 6-record, 7-play, 8-pause, 9-stop, 10-loop, 11-save, 12-load
+//playback speed and zoom
+//2-scrub, 3-select, 4-paint, 5-move, 6-scale, 7-record, 8-play, 9-pause, 10-stop, 12-loop, 13-save, 14-load
 current_tool = 2;
 
 editor_tools = [];
@@ -40,6 +41,9 @@ sliderWidth = 6;
 elementOver = null;
 
 current_song = [];
+
+recordResolution = 20;
+recordStartTime = null;
 
 // main script variables
 keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
