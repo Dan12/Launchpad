@@ -41,23 +41,30 @@ function drawLayout(){
   edc.fillStyle = "orange";
   edc.strokeStyle = "lightgray";
   current_song.forEach(function(e, i, a){
-    var changefill = false
-    if(e == singleSelected)
-      changefill = true;
-    for(var ind = 0; ind < selected.length; ind++){
-      if(e == el || changefill){
+    if(toPix(e.p)+xOffset <= edcWidth && toPix(e.p)+toPix(e.dn)+xOffset >= 0){
+      var changefill = false
+      if(e == singleSelected)
         changefill = true;
-        break;
+      for(var ind = 0; ind < selected.length; ind++){
+        if(e == el || changefill){
+          changefill = true;
+          break;
+        }
       }
+      if(changefill)
+        edc.fillStyle = "rgb(220,220,50)";
+      var nRow = keyCodes.indexOf(e.kc);
+      edc.fillRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
+      edc.strokeRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
+      if(changefill)
+        edc.fillStyle = "orange";
     }
-    if(changefill)
-      edc.fillStyle = "rgb(220,220,50)";
-    var nRow = keyCodes.indexOf(e.kc);
-    edc.fillRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
-    edc.strokeRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
-    if(changefill)
-      edc.fillStyle = "orange";
   });
+  
+  if(selectBoundingRect.w != null){
+    edc.fillStyle = "rgba(0,0,255,0.25)";
+    edc.fillRect(usedSelectBoundingRect.x, usedSelectBoundingRect.y, usedSelectBoundingRect.w, usedSelectBoundingRect.h);
+  }
   
   //scrubbing bar below
   edc.lineWidth = 3;

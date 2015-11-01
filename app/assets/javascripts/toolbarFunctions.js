@@ -133,6 +133,7 @@ function saveSong(){
 
 function moveMouseDown(){
   if(selected.length == 0){
+    resetSelectedRect();
     current_song.forEach(function(e, i, a){
       if(mouseX >= toPix(e.p)+xOffset && mouseX <= toPix(e.p)+xOffset+toPix(e.dn) && mouseY >= keyCodes.indexOf(e.kc)*cellHeight+yOffset && mouseY <= (keyCodes.indexOf(e.kc)+1)*cellHeight+yOffset){
         singleSelected = e;
@@ -213,6 +214,44 @@ function moveMouseUp(){
   singleSelected = null;
 }
 
+function selectedMouseDown(){
+  resetSelectedRect();
+  selectBoundingRect.x = mouseX-xOffset;
+  selectBoundingRect.y = mouseY-yOffset;
+  selectBoundingRect.w = 0;
+  selectBoundingRect.h = 0;
+  selectedPrevX = mouseX;
+  selectedPrevY = mouseY;
+}
+
+function selectedMouseMove(){
+  if(mouseDown){
+      selectBoundingRect.w += mouseX-selectedPrevX;
+      selectBoundingRect.h += mouseY-selectedPrevY;
+      usedSelectBoundingRect.x = selectBoundingRect.x;
+      usedSelectBoundingRect.y = selectBoundingRect.y;
+      usedSelectBoundingRect.h = selectBoundingRect.h;
+      usedSelectBoundingRect.w = selectBoundingRect.w;
+      if(usedSelectBoundingRect.w < 0){
+        usedSelectBoundingRect.x+=usedSelectBoundingRect.w;
+        usedSelectBoundingRect.w = usedSelectBoundingRect.w*-1;
+      }
+      if(usedSelectBoundingRect.h < 0){
+        usedSelectBoundingRect.y+=usedSelectBoundingRect.h;
+        usedSelectBoundingRect.h = usedSelectBoundingRect.h*-1;
+      }
+  }
+  selectedPrevX = mouseX;
+  selectedPrevY = mouseY;
+}
+
+function resetSelectedRect(){
+  selectBoundingRect.x = null;
+  selectBoundingRect.y = null;
+  selectBoundingRect.w = null;
+  selectBoundingRect.h = null;
+}
+
 function toolFunctionManager(){
   if(current_tool == 7 && recordStartTime == null)
     startRecording();
@@ -237,6 +276,8 @@ function toolMouseDownManager(mx, my){
     scrub(mx, my);
   if(current_tool == 5)
     moveMouseDown();
+  if(current_tool == 3)
+    selectedMouseDown();
 }
 
 function toolMouseUpManager(mx, my){
@@ -249,6 +290,8 @@ function toolMouseMoveManager(mx, my){
     scrub(mx, my);
   if(current_tool == 5)
     moveMouseMove();
+  if(current_tool == 3)
+    selectedMouseMove();
 }
 
 function toolOffsetManager(mx, my){

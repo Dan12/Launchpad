@@ -62,6 +62,8 @@ selected = [];
 singleSelected = null;
 selectedPrevX = 0;
 selectedPrevY = 0;
+selectBoundingRect = {x: null, y: null, w: null, h: null}
+usedSelectBoundingRect = {x: null, y: null, w: null, h: null};
 
 // main script variables
 keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
