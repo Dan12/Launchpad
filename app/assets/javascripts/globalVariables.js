@@ -27,11 +27,13 @@ tickScaleEx = [10, 1000];
 tickWidth = 50;
 
 //playback speed and zoom
-//2-scrub, 3-select, 4-paint, 5-move, 6-scale, 7-record, 8-play, 9-pause, 10-stop, 11-loop, 12-save, 13-load
+//2-scrub, 3-select, 4-paint, 5-move, 6-scale, 7-record, 8-play, 9-pause, 10-stop, 11-loop, 12-save, 13-load, 14-new, 15-copy, 16-paste, 17-delete
 current_tool = 2;
 
 editor_tools = [];
-tool_names = ["scrub", "select", "paint", "move", "scale", "record", "play", "pause", "stop", "loop", "save", "load"]
+tool_names = ["scrub", "select", "paint", "move", "scale", "record", "play", "pause", "stop", "loop", "save", "load", "new", "copy", "paste", "delete"];
+
+toolXOffset = 0;
 
 playback_speed = 1;
 playback_speedEx = [.1, 1.5];
@@ -53,6 +55,7 @@ mouseX = 0;
 mouseY = 0;
 
 playingResolution = 20;
+constPlayingResolution = 20;
 playingStartTime = null;
 
 selected = [];

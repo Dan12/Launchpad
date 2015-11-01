@@ -69,21 +69,23 @@ function scrubOffset(mx){
 }
 
 function startPlaying(){
-  playingStartTime = new Date().getTime()-cursor_at;
-  cursor_at = Math.floor(cursor_at/playingResolution)*playingResolution
+  playingResolution = Math.floor(constPlayingResolution/playback_speed);
+  cursor_at = Math.floor(cursor_at/constPlayingResolution)*constPlayingResolution;
+  playingStartTime = new Date().getTime()-cursor_at/playback_speed;
   setTimeout(playLoop, playingResolution);
 }
 
 function playLoop(){
-  cursor_at += playingResolution;
+  cursor_at += constPlayingResolution;
   current_song.forEach(function(e, i, a){
-    var deresP = Math.floor(e.p/playingResolution)*playingResolution;
+    var deresP = Math.floor(e.p/constPlayingResolution)*constPlayingResolution;
     if(cursor_at == deresP){
       keyTap(e.kc, e.dn);
     }
   });
   drawLayout();
-  diff = (new Date().getTime() - playingStartTime)-cursor_at;
+  diff = Math.floor((new Date().getTime() - playingStartTime)*playback_speed)-cursor_at;
+  //console.log(diff+","+playingResolution+","+(Math.floor((new Date().getTime() - playingStartTime)*playback_speed))+","+((new Date().getTime() - playingStartTime)));
   if(current_tool == 8 && diff > -playingResolution && cursor_at < maxWidth)
     setTimeout(playLoop, (playingResolution - diff));
   else
@@ -176,8 +178,8 @@ function loadSongs(){
       // console.log(jqXHR);
       $("#gray_background").css("display", "block");
       $("#load_songs").css("display", "block");
+      $(".loaded_song").remove();
       data.data.forEach(function(e, i, a){
-        $(".loaded_song").remove();
         $("#load_songs").append('<div class="loaded_song" song_ind="'+i+'">'+e.name+'</div>');
       });
       $(".loaded_song").click(function(){
@@ -222,6 +224,10 @@ function toolFunctionManager(){
   }
   if(current_tool == 13){
     loadSongs();
+    current_tool = 2;
+  }
+  if(current_tool == 14){
+    current_song = [];
     current_tool = 2;
   }
 }

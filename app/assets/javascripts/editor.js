@@ -41,9 +41,22 @@ function drawLayout(){
   edc.fillStyle = "orange";
   edc.strokeStyle = "lightgray";
   current_song.forEach(function(e, i, a){
+    var changefill = false
+    if(e == singleSelected)
+      changefill = true;
+    for(var ind = 0; ind < selected.length; ind++){
+      if(e == el || changefill){
+        changefill = true;
+        break;
+      }
+    }
+    if(changefill)
+      edc.fillStyle = "rgb(220,220,50)";
     var nRow = keyCodes.indexOf(e.kc);
     edc.fillRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
-    edc.strokeRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2)
+    edc.strokeRect(toPix(e.p),nRow*cellHeight+1,toPix(e.dn),cellHeight-2);
+    if(changefill)
+      edc.fillStyle = "orange";
   });
   
   //scrubbing bar below
@@ -121,19 +134,18 @@ function drawLayout(){
     edc.fillRect(-xOffset+mapValue(playback_speed, playback_speedEx[0], playback_speedEx[1], editor_tools[0].x, editor_tools[0].x+editor_tools[0].w, true)-sliderWidth/2, -yOffset+editor_tools[0].y-sliderWidth/2, sliderWidth, editor_tools[0].h+sliderWidth);
     edc.strokeStyle = "black";
     edc.strokeRect(-xOffset+mapValue(playback_speed, playback_speedEx[0], playback_speedEx[1], editor_tools[0].x, editor_tools[0].x+editor_tools[0].w, true)-sliderWidth/2, -yOffset+editor_tools[0].y-sliderWidth/2, sliderWidth, editor_tools[0].h+sliderWidth);
+    edc.fillStyle = "black";
+    edc.fillText(""+playback_speed, -xOffset+editor_tools[0].x+editor_tools[0].w+4, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
   }
-  edc.fillStyle = "black";
-  edc.fillText(""+playback_speed, -xOffset+edcWidth/15, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
   
   //zoom
   edc.fillStyle = "white";
   if(editor_tools[1] != null){
     edc.fillRect(-xOffset+mapValue(tickScale, tickScaleEx[0], tickScaleEx[1], editor_tools[1].x, editor_tools[1].x+editor_tools[1].w, true)-sliderWidth/2, -yOffset+editor_tools[1].y-sliderWidth/2, sliderWidth, editor_tools[1].h+sliderWidth);
     edc.strokeRect(-xOffset+mapValue(tickScale, tickScaleEx[0], tickScaleEx[1], editor_tools[1].x, editor_tools[1].x+editor_tools[1].w, true)-sliderWidth/2, -yOffset+editor_tools[1].y-sliderWidth/2, sliderWidth, editor_tools[1].h+sliderWidth);
+    edc.fillStyle = "black";
+    edc.fillText(""+tickScale, -xOffset+editor_tools[1].x+editor_tools[1].w+4, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
   }
-  edc.fillStyle = "black";
-  edc.fillText(""+tickScale, -xOffset+edcWidth/6, -yOffset+(edcHeight-toolbarHeight)+toolbarHeight/1.5);
-  
   if(elementOver != null){
     edc.font = "16px arial";
     edc.fillStyle = "white";

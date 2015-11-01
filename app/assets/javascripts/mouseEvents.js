@@ -1,8 +1,22 @@
 function setupMouseInputs(){
   editor_canvas.addEventListener('mousewheel',function(event){
     event.preventDefault();
-    xOffset-=event.deltaX;
-    yOffset-=event.deltaY;
+    var my = event.pageY - $("#editor_canvas").offset().top;
+    if(my >= edcHeight-toolbarHeight){
+      var deltaOne = toolXOffset;
+      toolXOffset-=event.deltaX;
+      if(toolXOffset > 0)
+        toolXOffset = 0;
+      if(edcWidth-editor_tools[editor_tools.length-1].x-editor_tools[editor_tools.length-1].w-editor_tools[editor_tools.length-1].n.length*11 > 0 && event.deltaX > 0)
+        toolXOffset = deltaOne;
+      editor_tools.forEach(function(e, i, a){
+        e.x+=toolXOffset-deltaOne;
+      });
+    }
+    else{
+      xOffset-=event.deltaX;
+      yOffset-=event.deltaY;
+    }
     drawLayout();
   });
   
