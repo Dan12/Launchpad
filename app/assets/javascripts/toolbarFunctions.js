@@ -97,19 +97,28 @@ function playbackOffsetUpdate(){
 }
 
 function saveSong(){
+  if(loaded_song_id == -1)
+    loaded_song_name = prompt("Enter song name");
   $.ajax({
     type: "POST",
     url: "/create_song",
-    data: {song_data: current_song},
+    data: {song_data: current_song, id: loaded_song_id, name: loaded_song_name},
     success: function(data, textStatus, jqXHR) {
       // console.log(data);
       // console.log(textStatus);
       // console.log(jqXHR);
       // console.log(data.data.song_data);
-      if(data.data.song_data == "null")
+      if(data.data == "null")
         alert("Not Saved, try again");
+      if(data.data == "nli"){
+        alert("You must be logged in");
+        if(confirm("Go to login page?"))
+          $("#login_form").css("display", "block")
+      }
       else{
         song_data = data.data.song_data;
+        loaded_song_id = data.data.id
+        loaded_song_name = data.data.name
         drawLayout();
       }
     },
@@ -156,6 +165,23 @@ function moveMouseMove(){
   selectedPrevY = mouseY;
 }
 
+function loadSongs(){
+  $.ajax({
+    type: "POST",
+    url: "/view_all_songs",
+    data: {},
+    success: function(data, textStatus, jqXHR) {
+      console.log(data);
+      // console.log(textStatus);
+      // console.log(jqXHR);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.log("Error=" + errorThrown);
+        alert("There was an error");
+    }
+  });
+}
+
 function moveMouseUp(){
   singleSelected = null;
 }
@@ -165,8 +191,14 @@ function toolFunctionManager(){
     startRecording();
   if(current_tool == 8 && playingStartTime == null)
     startPlaying();
-  if(current_tool == 12)
+  if(current_tool == 12){
     saveSong();
+    current_tool = 2;
+  }
+  if(current_tool == 13){
+    loadSongs();
+    current_tool = 2;
+  }
 }
 
 function toolMouseDownManager(mx, my){

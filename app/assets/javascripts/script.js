@@ -1,14 +1,15 @@
 <!--guitar hero launchpad/DDR launchpad-->
 $(document).ready(function(){
-    
-    loadSounds(sound1Srcs, sounds1, 1);
-    loadSounds(sound4Srcs, sounds4, 4);
-    loadSounds(sound2Srcs, sounds2, 2);
-    loadSounds(sound3Srcs, sounds3, 3);
-    
-    $(window).resize(function(){
-        reformat();
-    });
+    if(document.getElementById("editor_canvas") != null){
+        loadSounds(sound1Srcs, sounds1, 1);
+        loadSounds(sound4Srcs, sounds4, 4);
+        loadSounds(sound2Srcs, sounds2, 2);
+        loadSounds(sound3Srcs, sounds3, 3);
+        
+        $(window).resize(function(){
+            reformat();
+        });
+    }
 });
 
 function loadSounds(srcArr, soundArr, chain){

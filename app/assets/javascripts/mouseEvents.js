@@ -13,6 +13,27 @@ function setupMouseInputs(){
     });
   });
   
+  $("#submit_login").click(function() {
+      $.ajax({
+        type: "POST",
+        url: "/login",
+        data: {username: $("#login_username").val(), password: $("#login_password").val()},
+        success: function(data, textStatus, jqXHR) {
+          console.log(data);
+          // console.log(textStatus);
+          // console.log(jqXHR);
+          if(data.message == "success")
+            $("#login_form").css("display", "none");
+          else
+            alert("There was an error");
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("Error=" + errorThrown);
+            alert("There was an error");
+        }
+      });
+  });
+  
   $("#editor_canvas").mousemove(function(e){
     elementOver = null;
     mouseX = e.pageX - $("#editor_canvas").offset().left;

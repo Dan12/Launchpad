@@ -42,6 +42,7 @@ elementOver = null;
 
 current_song = [];
 loaded_song_id = -1;
+loaded_song_name = "";
 
 recordResolution = 100;
 recordStartTime = null;
