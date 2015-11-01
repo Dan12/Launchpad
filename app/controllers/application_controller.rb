@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   end
   
   def index
+    # session[:user_id] = nil
     render "index"
   end
   

@@ -114,8 +114,8 @@ function saveSong(){
         alert("Not Saved, try again");
       else if(data.data == "nli"){
         alert("You must be logged in");
-        if(confirm("Go to login page?"))
-          $("#login_form").css("display", "block")
+        $("#gray_background").css("display","block");
+        $("#login_form").css("display", "block");
       }
       else{
         alert("Song successfully saved");

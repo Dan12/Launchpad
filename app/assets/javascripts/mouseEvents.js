@@ -36,8 +36,10 @@ function setupMouseInputs(){
           console.log(data);
           // console.log(textStatus);
           // console.log(jqXHR);
-          if(data.message == "success")
+          if(data.message == "success"){
             $("#login_form").css("display", "none");
+            $("#gray_background").css("display", "none");
+          }
           else
             alert("There was an error");
         },

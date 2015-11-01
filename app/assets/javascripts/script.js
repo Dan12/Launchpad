@@ -87,50 +87,52 @@ function loadKeyboard(){
     });
     
     $(document).keydown(function(e){
-        //console.log(e.keyCode);
-        if(e.keyCode == 39){
-            curSound = 1;
-            $(".soundPack").html("Sound Pack: "+curSound);
-            switchSoundPack();
-        }
-        else if(e.keyCode == 37){
-            curSound = 0;
-            $(".soundPack").html("Sound Pack: "+curSound);
-            switchSoundPack();
-        }
-        else if(e.keyCode == 38){
-            curSound = 2;
-            $(".soundPack").html("Sound Pack: "+curSound);
-            switchSoundPack();
-        }
-        else if(e.keyCode == 40){
-            curSound = 3;
-            $(".soundPack").html("Sound Pack: "+curSound);
-            switchSoundPack();
-        }
-        else{
+        if($("#gray_background").css("display") == "none"){
             //console.log(e.keyCode);
-            if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null){
-                combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
-                combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
-                areas[curSound].forEach(function(el, ind, arr){
-                    for(var j = 0; j < el.length; j++){
-                        if(keyPairs.indexOf(e.keyCode) == el[j]){
-                            for(var k = 0; k < el.length; k++){
-                                if(k != j)
-                                    combSounds[curSound][el[k]].stop();
-                            }
-                            break;
-                        }
-                    }
-                });
-                kdRecordInput(e.keyCode);
+            if(e.keyCode == 39){
+                curSound = 1;
+                $(".soundPack").html("Sound Pack: "+curSound);
+                switchSoundPack();
             }
-            $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
-            $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
+            else if(e.keyCode == 37){
+                curSound = 0;
+                $(".soundPack").html("Sound Pack: "+curSound);
+                switchSoundPack();
+            }
+            else if(e.keyCode == 38){
+                curSound = 2;
+                $(".soundPack").html("Sound Pack: "+curSound);
+                switchSoundPack();
+            }
+            else if(e.keyCode == 40){
+                curSound = 3;
+                $(".soundPack").html("Sound Pack: "+curSound);
+                switchSoundPack();
+            }
+            else{
+                //console.log(e.keyCode);
+                if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null){
+                    combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
+                    combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
+                    areas[curSound].forEach(function(el, ind, arr){
+                        for(var j = 0; j < el.length; j++){
+                            if(keyPairs.indexOf(e.keyCode) == el[j]){
+                                for(var k = 0; k < el.length; k++){
+                                    if(k != j)
+                                        combSounds[curSound][el[k]].stop();
+                                }
+                                break;
+                            }
+                        }
+                    });
+                    kdRecordInput(e.keyCode);
+                }
+                $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
+                $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
+            }
+            
+            kdRecordInputSwitch(e.keyCode);
         }
-        
-        kdRecordInputSwitch(e.keyCode);
     });
     $(document).keyup(function(e){
         if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
