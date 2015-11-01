@@ -90,6 +90,12 @@ function setupMouseInputs(){
     mouseDown = false;
     drawLayout();
   });
+  
+  $("#close_layover").click(function() {
+    $("#gray_background").css("display", "none");
+    $("#load_songs").css("display", "none");
+    $("#login_form").css("display", "none");
+  });
 }
 
 function checkOffsets(){

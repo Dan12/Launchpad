@@ -110,15 +110,15 @@ function saveSong(){
       // console.log(data.data.song_data);
       if(data.data == "null")
         alert("Not Saved, try again");
-      if(data.data == "nli"){
+      else if(data.data == "nli"){
         alert("You must be logged in");
         if(confirm("Go to login page?"))
           $("#login_form").css("display", "block")
       }
       else{
-        song_data = data.data.song_data;
-        loaded_song_id = data.data.id
-        loaded_song_name = data.data.name
+        alert("Song successfully saved");
+        loaded_song_id = data.data.id;
+        loaded_song_name = data.data.name;
         drawLayout();
       }
     },
@@ -171,9 +171,34 @@ function loadSongs(){
     url: "/view_all_songs",
     data: {},
     success: function(data, textStatus, jqXHR) {
-      console.log(data);
+      // console.log(data);
       // console.log(textStatus);
       // console.log(jqXHR);
+      $("#gray_background").css("display", "block");
+      $("#load_songs").css("display", "block");
+      data.data.forEach(function(e, i, a){
+        $(".loaded_song").remove();
+        $("#load_songs").append('<div class="loaded_song" song_ind="'+i+'">'+e.name+'</div>');
+      });
+      $(".loaded_song").click(function(){
+        $("#gray_background").css("display", "none");
+        $("#load_songs").css("display", "none");
+        var i = 0;
+        var temparr = [];
+        var tempinput = data.data[parseInt($(this).attr("song_ind"))].song_data[i];
+        while(tempinput !== undefined){
+          tempinput.dn = parseInt(tempinput.dn);
+          tempinput.p = parseInt(tempinput.p);
+          tempinput.kc = parseInt(tempinput.kc);
+          temparr.push(tempinput);
+          i++;
+          tempinput = data.data[parseInt($(this).attr("song_ind"))].song_data[i];
+        }
+        current_song = temparr;
+        loaded_song_name = data.data[parseInt($(this).attr("song_ind"))].name;
+        loaded_song_id = parseInt(data.data[parseInt($(this).attr("song_ind"))].id)
+        drawLayout();
+      });
     },
     error: function(jqXHR, textStatus, errorThrown) {
         console.log("Error=" + errorThrown);
