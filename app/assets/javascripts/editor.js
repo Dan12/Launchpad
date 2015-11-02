@@ -10,6 +10,7 @@ function setupEditor(){
 }
 
 function drawLayout(){
+  //console.log("draw");
   playbackOffsetUpdate();
   checkOffsets();
   

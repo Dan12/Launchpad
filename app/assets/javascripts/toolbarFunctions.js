@@ -83,7 +83,8 @@ function playLoop(){
       keyTap(e.kc, e.dn);
     }
   });
-  drawLayout();
+  if(cursor_at % recordResolution == 0)
+    drawLayout();
   diff = Math.floor((new Date().getTime() - playingStartTime)*playback_speed)-cursor_at;
   //console.log(diff+","+playingResolution+","+(Math.floor((new Date().getTime() - playingStartTime)*playback_speed))+","+((new Date().getTime() - playingStartTime)));
   if(current_tool == 8 && diff > -playingResolution && cursor_at < maxWidth)
