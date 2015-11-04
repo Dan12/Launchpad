@@ -4,8 +4,7 @@ This website is an attempt to recreate a MIDI controller using the keyboard.
 
 Features:
 
-* First of the Year Eqninox by Skrillex sounds, obtained from Nev's project file 
-https://www.youtube.com/watch?v=SAXpBgkXt60
+* First of the Year Eqninox by Skrillex sounds, obtained from Nev's project file: https://www.youtube.com/watch?v=SAXpBgkXt60
 
 * Editor Capable of recording and playing back keyboard inputs at varying playback speeds
 
