@@ -90,3 +90,8 @@ h1{
 #toggle_editor_container{
     display: none;
 }
+
+#license{
+    display: inline-block;
+    width:600px;
+}
