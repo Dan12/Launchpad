@@ -148,6 +148,7 @@ function loadKeyboard(){
     
     reformat();
     $("#editor_canvas").attr({"width": $(".buttons").width()+"px", "height": "250px"});
+    $("#toggle_editor_container").css("display", "inline-block");
     
     edcWidth = parseInt($("#editor_canvas").attr("width"));
     edcHeight = parseInt($("#editor_canvas").attr("height"));
@@ -168,6 +169,8 @@ function switchSoundPack(){
 
 function keyTap(keycode, duration){
     $(document).trigger(jQuery.Event( 'keydown', { which: keycode, keyCode: keycode } ));
+    if(current_tool == 8)
+        duration = duration/playback_speed;
     setTimeout(function(){
         $(document).trigger(jQuery.Event( 'keyup', { which: keycode, keyCode: keycode } ));
     },duration);

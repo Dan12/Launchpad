@@ -1,28 +1,22 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This website is an attempt to recreate a MIDI controller using the keyboard.
 
-Things you may want to cover:
+Features:
 
-* Ruby version
+* First of the Year Eqninox by Skrillex sounds, obtained from Nev's project file 
+https://www.youtube.com/watch?v=SAXpBgkXt60
 
-* System dependencies
+* Editor Capable of recording and playing back keyboard inputs at varying playback speeds
 
-* Configuration
+* Able to load and save sounds to a database, only available to those who have registered an account which can only be done from the console
 
-* Database creation
+* mySql test database and Postgres production database
 
-* Database initialization
+* Hosted on Heroku with hobby plan
 
-* How to run the test suite
+TODO:
 
-* Services (job queues, cache servers, search engines, etc.)
+* Downloadable offline version, probably zipped JS, CSS, HTML, and audio files
 
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+* Finish editor tools and put recorded parts of songs on main page

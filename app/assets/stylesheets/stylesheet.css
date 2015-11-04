@@ -1,5 +1,6 @@
 *{
     font-family: arial;
+    text-align: center;  
 }
 
 h1{
@@ -84,4 +85,8 @@ h1{
     display: inline;
     cursor:pointer;
     padding: 2px 6px;
+}
+
+#toggle_editor_container{
+    display: none;
 }
