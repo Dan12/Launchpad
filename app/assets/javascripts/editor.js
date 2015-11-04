@@ -42,7 +42,8 @@ function drawLayout(){
   edc.fillStyle = "orange";
   edc.strokeStyle = "lightgray";
   current_song.forEach(function(e, i, a){
-    if(toPix(e.p)+xOffset <= edcWidth && toPix(e.p)+toPix(e.dn)+xOffset >= 0){
+    var row = keyCodes.indexOf(e.kc)*cellHeight;
+    if(toPix(e.p)+xOffset <= edcWidth && toPix(e.p)+toPix(e.dn)+xOffset >= 0 && row+yOffset >= 0 && row+cellHeight+yOffset <=edcHeight){
       var changefill = false
       if(e == singleSelected)
         changefill = true;
