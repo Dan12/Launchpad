@@ -268,6 +268,7 @@ function toolFunctionManager(){
   }
   if(current_tool == 14){
     current_song = [];
+    loaded_song_id = -1;
     current_tool = 2;
   }
 }
