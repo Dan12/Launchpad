@@ -26,4 +26,8 @@ class ApplicationController < ActionController::Base
       render :json => {"message" => "failed"}
     end
   end
+  
+  def google13ecc4458e525973
+    render "google13ecc4458e525973", :layout => false;
+  end
 end

@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   #song
   post "/create_song" => "song#create"
   post "/view_all_songs" => "song#view_all"
+  
+  get "/google13ecc4458e525973" => "application#google13ecc4458e525973"
 end
