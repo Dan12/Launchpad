@@ -22,9 +22,13 @@ function setupMouseInputs(){
   
   $("#toggle_editor_container").click(function(){
     $("#editor_container").toggle("display", function(){
-      drawLayout(); reformat();
-      $("#toggle_editor_container").html($("#editor_container").css("display") == "none" ? "Open Editor" : "Close Editor");
+      drawLayout(); 
+      reformat();
     });
+    $("#links").css("display","none");
+    $("#info").css("display", "none");
+    $(".click_button").css("background-color","white");
+    $(this).css("background-color","lightgray");
   });
   
   $("#submit_login").click(function() {

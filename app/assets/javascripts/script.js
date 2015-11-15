@@ -55,7 +55,7 @@ function requestSound(i, srcArr, soundArr, chain){
 
 function checkLoaded(){
     numLoaded++;
-    $(".soundPack").html("Loading sounds ("+numLoaded+"/"+(4*12*numSoundPacks)+"). This should only take a few seconds");
+    $(".soundPack").html("Loading sounds ("+numLoaded+"/"+(4*12*numSoundPacks)+"). This should only take a few seconds.");
     if(numLoaded == 4*12*numSoundPacks){
         combSounds = [sounds1, sounds4, sounds2, sounds3];
         loadKeyboard();
@@ -74,16 +74,30 @@ function loadKeyboard(){
                 str = "\\n"
             if(keyPairs[i*12+j] == 16)
                 str = "\\s"
-            $(".button-row:last").append('<div class="button button-'+(i*12+j)+'" pressure="'+press+'" released="true">'+str+'</div>');
+            $(".button-row:last").append('<div class="button button-'+(i*12+j)+'" pressure="'+press+'" released="true" buttonnum='+(i*12+j)+'>'+str+'</div>');
             $('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
         }
     }
     
-    $(".soundPack").html("Sound Pack: "+curSound);
+    $(".button").bind("touchstart", function(){
+       var num = parseInt($(this).attr("buttonnum"));
+       playKey(keyPairs[num]);
+       event.preventDefault();
+       return false;
+    });
     
-    $(".button").click(function(){
-       $(this).attr("pressure", $(this).attr("pressure") == "false" ? "true" : "false");
-       $(this).css("background-color", $(this).attr("pressure") == "true" ? "lightgray" : "white");
+    $(".button").bind("touchend", function(){
+       var num = parseInt($(this).attr("buttonnum"));
+       releaseKey(keyPairs[num]);
+       event.preventDefault();
+       return false;
+    });
+    
+    $(".button").bind("touchcancel", function(){
+       var num = parseInt($(this).attr("buttonnum"));
+       releaseKey(keyPairs[num]);
+       event.preventDefault();
+       return false;
     });
     
     $(document).keydown(function(e){
@@ -91,64 +105,92 @@ function loadKeyboard(){
             //console.log(e.keyCode);
             if(e.keyCode == 39){
                 curSound = 1;
-                $(".soundPack").html("Sound Pack: "+curSound);
                 switchSoundPack();
             }
             else if(e.keyCode == 37){
                 curSound = 0;
-                $(".soundPack").html("Sound Pack: "+curSound);
                 switchSoundPack();
             }
             else if(e.keyCode == 38){
                 curSound = 2;
-                $(".soundPack").html("Sound Pack: "+curSound);
                 switchSoundPack();
             }
             else if(e.keyCode == 40){
                 curSound = 3;
-                $(".soundPack").html("Sound Pack: "+curSound);
                 switchSoundPack();
             }
             else{
                 //console.log(e.keyCode);
                 if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null){
-                    combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
-                    combSounds[curSound][keyPairs.indexOf(e.keyCode)].play();
-                    areas[curSound].forEach(function(el, ind, arr){
-                        for(var j = 0; j < el.length; j++){
-                            if(keyPairs.indexOf(e.keyCode) == el[j]){
-                                for(var k = 0; k < el.length; k++){
-                                    if(k != j)
-                                        combSounds[curSound][el[k]].stop();
-                                }
-                                break;
-                            }
-                        }
-                    });
-                    kdRecordInput(e.keyCode);
+                    playKey(e.keyCode);
                 }
-                $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","false");
-                $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color","rgb(255,160,0)");
             }
             
             kdRecordInputSwitch(e.keyCode);
         }
     });
     $(document).keyup(function(e){
-        if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
-            combSounds[curSound][keyPairs.indexOf(e.keyCode)].stop();
-        $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released","true");
-        $(".button-"+(keyPairs.indexOf(e.keyCode))+"").css("background-color", $(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("pressure") == "true" ? "lightgray" : "white");
-    
-        kuRecordInput(e.keyCode); 
+        if(combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
+            releaseKey(e.keyCode);
     });
     
         
+    initUI();
+}
+
+function releaseKey(kc){
+    if($(".button-"+(keyPairs.indexOf(kc))+"").attr("pressure") == "true")
+        combSounds[curSound][keyPairs.indexOf(kc)].stop();
+    $(".button-"+(keyPairs.indexOf(kc))+"").attr("released","true");
+    $(".button-"+(keyPairs.indexOf(kc))+"").css("background-color", $(".button-"+(keyPairs.indexOf(kc))+"").attr("pressure") == "true" ? "lightgray" : "white");
+    kuRecordInput(kc); 
+}
+
+function playKey(kc){
+    combSounds[curSound][keyPairs.indexOf(kc)].stop();
+    combSounds[curSound][keyPairs.indexOf(kc)].play();
+    areas[curSound].forEach(function(el, ind, arr){
+        for(var j = 0; j < el.length; j++){
+            if(keyPairs.indexOf(kc) == el[j]){
+                for(var k = 0; k < el.length; k++){
+                    if(k != j)
+                        combSounds[curSound][el[k]].stop();
+                }
+                break;
+            }
+        }
+    });
+    kdRecordInput(kc);
+    
+    $(".button-"+(keyPairs.indexOf(kc))+"").attr("released","false");
+    $(".button-"+(keyPairs.indexOf(kc))+"").css("background-color","rgb(255,160,0)");
+}
+
+function initUI(){
+    $(".soundPack").html("Sound Pack: "+(curSound+1));
+    
     setupEditor();
     
     reformat();
     $("#editor_canvas").attr({"width": $(".buttons").width()+"px", "height": "250px"});
     $("#toggle_editor_container").css("display", "inline-block");
+    
+    $("#info_button").css("display", "inline-block");
+    $("#info_button").click(function(){
+        $("#info").toggle("display");
+        $("#links").css("display","none");
+        $("#editor_container").css("display", "none");
+        $(".click_button").css("background-color","white");
+        $(this).css("background-color","lightgray");
+    });
+    $("#links_button").css("display", "inline-block");
+    $("#links_button").click(function(){
+        $("#links").toggle("display");
+        $("#editor_container").css("display","none");
+        $("#info").css("display", "none");
+        $(".click_button").css("background-color","white");
+        $(this).css("background-color","lightgray");
+    });
     
     edcWidth = parseInt($("#editor_canvas").attr("width"));
     edcHeight = parseInt($("#editor_canvas").attr("height"));
@@ -156,6 +198,7 @@ function loadKeyboard(){
 }
 
 function switchSoundPack(){
+    $(".soundPack").html("Sound Pack: "+(curSound+1));
     for(var i = 0; i < 4; i++){
         for(var j = 0; j < 12; j++){
             var press = false;

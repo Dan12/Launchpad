@@ -5,6 +5,7 @@
 
 h1{
  text-align: center;   
+ margin-bottom: 10px;
 }
 
 .button{
@@ -24,10 +25,10 @@ h1{
     display:inline-block;
 }
 
-#link{
+.link{
     padding: 10px 0;
-    display: inline-block;
     width: 600px;
+    margin: auto;
 }
 
 #editor_canvas{
@@ -46,6 +47,7 @@ h1{
     font-size: 20px;
     display: inline-block;
     padding: 4px 8px;
+    margin: 0 10px;
 }
 
 #login_form, #load_songs{
@@ -95,5 +97,30 @@ h1{
 
 #license{
     display: inline-block;
-    width:600px;
+    margin-left: 20px;
+}
+
+#links, #info, #links_button, #info_button{
+    display: none;
+}
+
+#video_link{
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+a{
+    color: rgb(0,133,225);
+    background-color: white;
+    text-decoration: none;
+    padding: 0;
+    border-radius: 4px;
+    transition: all 200ms linear;
+    padding: 0 2px;
+}
+
+a:hover{
+    padding: 0 2px;
+    background-color: rgb(218,222,224);
+    text-decoration: underline;
 }
