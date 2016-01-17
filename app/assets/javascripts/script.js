@@ -1,4 +1,4 @@
-<!--guitar hero launchpad/DDR launchpad-->
+//guitar hero launchpad/DDR launchpad
 $(document).ready(function(){
     if(document.getElementById("editor_canvas") != null){
         loadSounds(sound1Srcs, sounds1, 1);
@@ -29,27 +29,37 @@ function loadSounds(srcArr, soundArr, chain){
 
 function requestSound(i, srcArr, soundArr, chain){
     setTimeout(function(){
-        $.ajax({
-            type: "POST",
-            url: "/get_asset_path",
-            data: {file_name: srcArr[i], sindex: i, chain: chain},
-            success: function(data, textStatus, jqXHR) {
-              //console.log(data);
-              // console.log(textStatus);
-              // console.log(jqXHR);
-              var tempi = parseInt(data.sindex);
-              soundArr[tempi] = new Howl({urls: [data.asset_path]});
-              checkLoaded();
+        console.log(i+","+chain+","+srcArr[i]+","+soundUrls["chain"+chain][srcArr[i]]);
+        soundArr[i] = new Howl({
+            urls: [soundUrls["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
+            onload: function(){
+                checkLoaded();
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log("Error=" + errorThrown);
-                //$(".soundPack").html("There was an error. Please Reload the page");
-                if(errorThrown == "Request Time-out")
-                    requestSound(i, srcArr, soundArr, chain);
-                else
-                    $("#error_msg").html("There was an error. Please reload the page");
+            onloaderror: function(){
+                $("#error_msg").html("There was an error. Please reload the page");
             }
         });
+        // $.ajax({
+        //     type: "POST",
+        //     url: "/get_asset_path",
+        //     data: {file_name: srcArr[i], sindex: i, chain: chain},
+        //     success: function(data, textStatus, jqXHR) {
+        //       //console.log(data);
+        //       // console.log(textStatus);
+        //       // console.log(jqXHR);
+        //       var tempi = parseInt(data.sindex);
+        //       soundArr[tempi] = new Howl({urls: [data.asset_path]});
+        //       checkLoaded();
+        //     },
+        //     error: function(jqXHR, textStatus, errorThrown) {
+        //         console.log("Error=" + errorThrown);
+        //         //$(".soundPack").html("There was an error. Please Reload the page");
+        //         if(errorThrown == "Request Time-out")
+        //             requestSound(i, srcArr, soundArr, chain);
+        //         else
+        //             $("#error_msg").html("There was an error. Please reload the page");
+        //     }
+        // });
     },i*50);
 }
 
