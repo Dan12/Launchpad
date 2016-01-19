@@ -29,13 +29,14 @@ function loadSounds(srcArr, soundArr, chain){
 
 function requestSound(i, srcArr, soundArr, chain){
     setTimeout(function(){
-        console.log(i+","+chain+","+srcArr[i]+","+soundUrls["chain"+chain][srcArr[i]]);
+        //console.log(i+","+chain+","+srcArr[i]+","+soundUrls["chain"+chain][srcArr[i]]);
         soundArr[i] = new Howl({
             urls: [soundUrls["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
             onload: function(){
                 checkLoaded();
             },
             onloaderror: function(){
+                console.log(i+","+chain+","+srcArr[i]+","+soundUrls["chain"+chain][srcArr[i]]);
                 $("#error_msg").html("There was an error. Please reload the page");
             }
         });
