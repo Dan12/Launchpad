@@ -124,3 +124,7 @@ a:hover{
     background-color: rgb(218,222,224);
     text-decoration: underline;
 }
+
+#dowload_link{
+    margin-top: 20px;
+}
