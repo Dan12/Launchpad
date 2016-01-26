@@ -40,27 +40,6 @@ function requestSound(i, srcArr, soundArr, chain){
                 $("#error_msg").html("There was an error. Please reload the page");
             }
         });
-        // $.ajax({
-        //     type: "POST",
-        //     url: "/get_asset_path",
-        //     data: {file_name: srcArr[i], sindex: i, chain: chain},
-        //     success: function(data, textStatus, jqXHR) {
-        //       //console.log(data);
-        //       // console.log(textStatus);
-        //       // console.log(jqXHR);
-        //       var tempi = parseInt(data.sindex);
-        //       soundArr[tempi] = new Howl({urls: [data.asset_path]});
-        //       checkLoaded();
-        //     },
-        //     error: function(jqXHR, textStatus, errorThrown) {
-        //         console.log("Error=" + errorThrown);
-        //         //$(".soundPack").html("There was an error. Please Reload the page");
-        //         if(errorThrown == "Request Time-out")
-        //             requestSound(i, srcArr, soundArr, chain);
-        //         else
-        //             $("#error_msg").html("There was an error. Please reload the page");
-        //     }
-        // });
     },i*50);
 }
 
@@ -80,11 +59,7 @@ function loadKeyboard(){
             var press = false;
             if(pressures[0].indexOf((i*12+j)) != -1)
                 press = true;
-            var str = String.fromCharCode(keyPairs[i*12+j]);
-            if(keyPairs[i*12+j] == 13)
-                str = "\\n"
-            if(keyPairs[i*12+j] == 16)
-                str = "\\s"
+            var str = ""+letterPairs[i*12+j];
             $(".button-row:last").append('<div class="button button-'+(i*12+j)+'" pressure="'+press+'" released="true" buttonnum='+(i*12+j)+'>'+str+'</div>');
             $('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
         }
@@ -131,17 +106,25 @@ function loadKeyboard(){
                 switchSoundPack();
             }
             else{
+                var keyInd = keyPairs.indexOf(e.keyCode);
+                if(keyInd == -1)
+                    keyInd = backupPairs.indexOf(e.keyCode);
+                //console.log(keyInd);
                 //console.log(e.keyCode);
-                if($(".button-"+(keyPairs.indexOf(e.keyCode))+"").attr("released") == "true" && combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null){
+                if($(".button-"+(keyInd)+"").attr("released") == "true" && combSounds[curSound][keyInd] != null){
                     playKey(e.keyCode);
                 }
+                e.preventDefault();
             }
             
             kdRecordInputSwitch(e.keyCode);
         }
     });
     $(document).keyup(function(e){
-        if(combSounds[curSound][keyPairs.indexOf(e.keyCode)] != null)
+        var keyInd = keyPairs.indexOf(e.keyCode);
+        if(keyInd == -1)
+            keyInd = backupPairs.indexOf(e.keyCode);
+        if(combSounds[curSound][keyInd] != null)
             releaseKey(e.keyCode);
     });
     
@@ -150,16 +133,22 @@ function loadKeyboard(){
 }
 
 function releaseKey(kc){
-    if($(".button-"+(keyPairs.indexOf(kc))+"").attr("pressure") == "true")
-        combSounds[curSound][keyPairs.indexOf(kc)].stop();
-    $(".button-"+(keyPairs.indexOf(kc))+"").attr("released","true");
-    $(".button-"+(keyPairs.indexOf(kc))+"").css("background-color", $(".button-"+(keyPairs.indexOf(kc))+"").attr("pressure") == "true" ? "lightgray" : "white");
+    var kcInd = keyPairs.indexOf(kc);
+    if(kcInd == -1)
+        kcInd = backupPairs.indexOf(kc);
+    if($(".button-"+(kcInd)+"").attr("pressure") == "true")
+        combSounds[curSound][kcInd].stop();
+    $(".button-"+(kcInd)+"").attr("released","true");
+    $(".button-"+(kcInd)+"").css("background-color", $(".button-"+(kcInd)+"").attr("pressure") == "true" ? "lightgray" : "white");
     kuRecordInput(kc); 
 }
 
 function playKey(kc){
-    combSounds[curSound][keyPairs.indexOf(kc)].stop();
-    combSounds[curSound][keyPairs.indexOf(kc)].play();
+    var kcInd = keyPairs.indexOf(kc);
+    if(kcInd == -1)
+        kcInd = backupPairs.indexOf(kc);
+    combSounds[curSound][kcInd].stop();
+    combSounds[curSound][kcInd].play();
     areas[curSound].forEach(function(el, ind, arr){
         for(var j = 0; j < el.length; j++){
             if(keyPairs.indexOf(kc) == el[j]){
@@ -173,8 +162,8 @@ function playKey(kc){
     });
     kdRecordInput(kc);
     
-    $(".button-"+(keyPairs.indexOf(kc))+"").attr("released","false");
-    $(".button-"+(keyPairs.indexOf(kc))+"").css("background-color","rgb(255,160,0)");
+    $(".button-"+(kcInd)+"").attr("released","false");
+    $(".button-"+(kcInd)+"").css("background-color","rgb(255,160,0)");
 }
 
 function initUI(){

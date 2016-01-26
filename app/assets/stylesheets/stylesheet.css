@@ -18,7 +18,7 @@ h1{
     text-align:center;
     border: solid 1px black;
     border-radius: 6px;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 .buttons{
