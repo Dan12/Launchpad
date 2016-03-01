@@ -28,6 +28,6 @@ class ApplicationController < ActionController::Base
   end
   
   def google13ecc4458e525973
-    render "google13ecc4458e525973", :layout => false;
+    render "google13ecc4458e525973", :layout => false
   end
 end
