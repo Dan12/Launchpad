@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   
   def logout
     session[:user_id] = nil
-    render :json => {"message" => "logged out"}
+    redirect_to "/"
   end
   
   def login

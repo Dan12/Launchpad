@@ -25,6 +25,7 @@ h1{
 
 .buttons{
     display:inline-block;
+    min-width: 840px;
 }
 
 .link{
@@ -94,6 +95,18 @@ h1{
     display: inline-block;
     border-radius: 2px;
     cursor: pointer;
+}
+
+#signout_button{
+    position: absolute;
+    top: 26px;
+    right: 30px;
+}
+
+#signout_button a{
+    padding: 4px 10px;
+    border: 1px solid gray;
+    border-radius: 2px;
 }
 
 #license{

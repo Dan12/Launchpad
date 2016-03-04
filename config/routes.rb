@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   post "/get_asset_path" => "application#getAssetUrl"
   
   post "/login" => "application#login"
-  post "/logout" => "application#logout"
+  get "/logout" => "application#logout"
   
   #song
   post "/create_song" => "song#create"

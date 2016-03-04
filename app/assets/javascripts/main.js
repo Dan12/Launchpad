@@ -4,7 +4,10 @@ $(document).ready(function(){
     
     $(window).resize(function(){
         $(".buttons").css("margin", "0");
-        $(".buttons").css("margin","0 "+(($("body").innerWidth()-$(".buttons").width()-30)/2)+"px");
+        var margin = (($("body").innerWidth()-$(".buttons").width()-30)/2);
+        if(margin < 0)
+            margin = 0;
+        $(".buttons").css("margin","0 "+margin+"px");
     });
     
 });
