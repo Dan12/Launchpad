@@ -93,7 +93,7 @@ var Keyboard_Space = new function(){
         $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_1"><</div>');
         $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_3">v</div>');
         $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_4">></div>');
-        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","lightgray");
+        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
         
         this.touchScreenSetup();
         
@@ -275,7 +275,7 @@ var Keyboard_Space = new function(){
     // switch sound pack and update pressures
     Keyboard.prototype.switchSoundPack = function(){
         $(".sound_pack_button").css("background-color","white");
-        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","lightgray");
+        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
         $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
         for(var i = 0; i < 4; i++){
             for(var j = 0; j < 12; j++){
@@ -342,16 +342,12 @@ var Keyboard_Space = new function(){
             saveNote.push({"note":notes[n].note, "beat":notes[n].beat, "length":notes[n].length});
         console.log(saveNote);
         this.backend.saveSong(JSON.stringify(saveNote), pid, this.editor);
-        // console.log(JSON.stringify(saveNote));
-        // // send project id back to editor (if new project, will be new pid)
-        // this.editor.notesSaved(pid);
     }
     
     // ask the user for the project they would like to load and then load that project from the server
     // send back a notes array of the loaded project with note,beat,and length and the project id
     Keyboard.prototype.loadNotes = function(){
         this.backend.loadSongs(this.editor);
-        //this.editor.notesLoaded([{"note":2,"beat":3,"length":1},{"note":3,"beat":6,"length":1}],1);
     }
     
     // TODO: convert keypairs to dictionarys/objects
