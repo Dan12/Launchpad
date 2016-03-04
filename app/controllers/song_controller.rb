@@ -1,6 +1,7 @@
 class SongController < ApplicationController
   
   def create
+    puts(params[:song_data])
     if session[:user_id] != nil
       @song = Song.find_by(id: params[:id])
       if @song
@@ -12,13 +13,13 @@ class SongController < ApplicationController
         s.song_data = params[:song_data]
         s.name = params[:name]
         if s.save
-          render :json => {"data" => s}
+          render :json => {"data" => s.id}
         else
           render :json => {"data" => "null"}
         end
       end
     else
-      render :json => {"data" => "nli"}
+      render :json => {"data" => "nil"}
     end
   end
   

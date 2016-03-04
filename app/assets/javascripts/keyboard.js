@@ -13,6 +13,8 @@ var Keyboard_Space = new function(){
         this.loadSounds(currentSongData["mappings"]["chain3"], currentSounds[2], 3);
         this.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
         
+        this.backend = BackendSpace.init();
+        
         console.log("New keyboard created");
     }
     
@@ -87,6 +89,12 @@ var Keyboard_Space = new function(){
             }
         }
         
+        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_2">^</div>');
+        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_1"><</div>');
+        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_3">v</div>');
+        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_4">></div>');
+        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","lightgray");
+        
         this.touchScreenSetup();
         
         this.keyPressSetup();
@@ -98,38 +106,42 @@ var Keyboard_Space = new function(){
     Keyboard.prototype.keyPressSetup = function(){
         var thisObj = this;
         $(document).keydown(function(e){
-            //console.log(e.keyCode);
-            if(thisObj.switchSoundPackCheck(e.keyCode)){
-                // do nothing
-                thisObj.playKey(e.keyCode);
-            }
-            else{
-                if(!(e.ctrlKey || e.metaKey)){
-                    var keyInd = keyPairs.indexOf(e.keyCode);
-                    if(keyInd == -1)
-                        keyInd = backupPairs.indexOf(e.keyCode);
-                    //console.log(keyInd);
-                    //console.log(e.keyCode);
-                    if($(".button-"+(keyInd)+"").attr("released") == "true" && currentSounds[currentSoundPack][keyInd] != null){
-                        thisObj.playKey(e.keyCode);
+            if($("#gray_background").css("display") == "none"){
+                //console.log(e.keyCode);
+                if(thisObj.switchSoundPackCheck(e.keyCode)){
+                    // do nothing
+                    thisObj.playKey(e.keyCode);
+                }
+                else{
+                    if(!(e.ctrlKey || e.metaKey)){
+                        var keyInd = keyPairs.indexOf(e.keyCode);
+                        if(keyInd == -1)
+                            keyInd = backupPairs.indexOf(e.keyCode);
+                        //console.log(keyInd);
+                        //console.log(e.keyCode);
+                        if($(".button-"+(keyInd)+"").attr("released") == "true" && currentSounds[currentSoundPack][keyInd] != null){
+                            thisObj.playKey(e.keyCode);
+                        }
+                        e.preventDefault();
                     }
-                    e.preventDefault();
                 }
             }
         });
         
         $(document).keyup(function(e){
-            if(thisObj.switchSoundPackCheck(e.keyCode)){
-                // do nothing
-                thisObj.releaseKey(e.keyCode);
-            }
-            else{
-                if(!(e.ctrlKey || e.metaKey)){
-                    var keyInd = keyPairs.indexOf(e.keyCode);
-                    if(keyInd == -1)
-                        keyInd = backupPairs.indexOf(e.keyCode);
-                    if(currentSounds[currentSoundPack][keyInd] != null)
-                        thisObj.releaseKey(e.keyCode);
+            if($("#gray_background").css("display") == "none"){
+                if(thisObj.switchSoundPackCheck(e.keyCode)){
+                    // do nothing
+                    thisObj.releaseKey(e.keyCode);
+                }
+                else{
+                    if(!(e.ctrlKey || e.metaKey)){
+                        var keyInd = keyPairs.indexOf(e.keyCode);
+                        if(keyInd == -1)
+                            keyInd = backupPairs.indexOf(e.keyCode);
+                        if(currentSounds[currentSoundPack][keyInd] != null)
+                            thisObj.releaseKey(e.keyCode);
+                    }
                 }
             }
         });
@@ -262,6 +274,8 @@ var Keyboard_Space = new function(){
     
     // switch sound pack and update pressures
     Keyboard.prototype.switchSoundPack = function(){
+        $(".sound_pack_button").css("background-color","white");
+        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","lightgray");
         $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
         for(var i = 0; i < 4; i++){
             for(var j = 0; j < 12; j++){
@@ -278,26 +292,46 @@ var Keyboard_Space = new function(){
     // shows and formats all of the UI elements
     Keyboard.prototype.initUI = function(){
         // create new editor and append it to the body element
-        MIDI_Editor.init("body", this);
+        BasicMIDI.init("#editor_container_div", this);
         
         $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
         
         // info and links buttons
         $("#info_button").css("display", "inline-block");
         $("#info_button").click(function(){
-            $("#info").toggle("display");
-            $("#links").css("display","none");
-            $("#editor_container").css("display", "none");
+            $("#info").toggle(300,function(){
+                if($("#info").css("display") == "block"){
+                    $("#info_button").css("background-color","lightgray");
+                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+                }
+            });
+            $("#editor_container_div").css("display","none");
+            $("#links").css("display", "none");
             $(".click_button").css("background-color","white");
-            $(this).css("background-color","lightgray");
         });
         $("#links_button").css("display", "inline-block");
         $("#links_button").click(function(){
-            $("#links").toggle("display");
-            $("#editor_container").css("display","none");
+            $("#links").toggle(300,function(){
+                if($("#links").css("display") == "block"){
+                    $("#links_button").css("background-color","lightgray");
+                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+                }
+            });
+            $("#editor_container_div").css("display","none");
             $("#info").css("display", "none");
             $(".click_button").css("background-color","white");
-            $(this).css("background-color","lightgray");
+        });
+        $("#toggle_editor_container").css("display", "inline-block");
+        $("#toggle_editor_container").click(function(){
+            $("#editor_container_div").toggle(300,function(){
+                if($("#editor_container_div").css("display") == "block"){
+                    $("#toggle_editor_container").css("background-color","lightgray");
+                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+                }
+            });
+            $("#links").css("display","none");
+            $("#info").css("display", "none");
+            $(".click_button").css("background-color","white");
         });
     }
     
@@ -306,15 +340,18 @@ var Keyboard_Space = new function(){
         var saveNote = [];
         for(var n in notes)
             saveNote.push({"note":notes[n].note, "beat":notes[n].beat, "length":notes[n].length});
-        console.log(JSON.stringify(saveNote));
-        // send project id back to editor (if new project, will be new pid)
-        this.editor.notesSaved(pid);
+        console.log(saveNote);
+        this.backend.saveSong(JSON.stringify(saveNote), pid, this.editor);
+        // console.log(JSON.stringify(saveNote));
+        // // send project id back to editor (if new project, will be new pid)
+        // this.editor.notesSaved(pid);
     }
     
     // ask the user for the project they would like to load and then load that project from the server
     // send back a notes array of the loaded project with note,beat,and length and the project id
     Keyboard.prototype.loadNotes = function(){
-        this.editor.notesLoaded([{"note":2,"beat":3,"length":1},{"note":3,"beat":6,"length":1}],1);
+        this.backend.loadSongs(this.editor);
+        //this.editor.notesLoaded([{"note":2,"beat":3,"length":1},{"note":3,"beat":6,"length":1}],1);
     }
     
     // TODO: convert keypairs to dictionarys/objects
