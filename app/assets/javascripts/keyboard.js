@@ -322,6 +322,12 @@ var Keyboard_Space = new function(){
                 
                 $(".button-row").remove();
                 
+                currentSounds = [];
+                for(var i = 0; i < numChains; i++)
+                    currentSounds.push([]);
+                    
+                mainObj.editor.notesLoaded([],-1);
+                
                 numSoundsLoaded = 0;
                 mainObj.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
                 mainObj.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
