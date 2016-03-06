@@ -8,6 +8,7 @@ var BackendSpace = new function(){
     $("#close_layover").click(function(){
       $("#gray_background").css("display","none");
       $("#login_form").css("display","none");
+      $("#load_songs").css("display","none");
     });
     
     $("#submit_login").click(function() {
@@ -34,7 +35,7 @@ var BackendSpace = new function(){
     });
   }
   
-  BackendComm.prototype.saveSong = function(notes, pid, editor){
+  BackendComm.prototype.saveSong = function(notes, pid, editor, song_number){
     var loadSongName = "";
     setTimeout(function(){
       if(pid == -1)
@@ -42,7 +43,7 @@ var BackendSpace = new function(){
       $.ajax({
         type: "POST",
         url: "/create_song",
-        data: {song_data: notes, id: pid, name: loadSongName},
+        data: {song_data: notes, id: pid, name: loadSongName, songNum: song_number},
         success: function(data, textStatus, jqXHR) {
           // console.log(data);
           // console.log(textStatus);
@@ -69,11 +70,11 @@ var BackendSpace = new function(){
     },100);
   }
   
-  BackendComm.prototype.loadSongs = function(editor){
+  BackendComm.prototype.loadSongs = function(editor, song_number){
     $.ajax({
       type: "POST",
       url: "/view_all_songs",
-      data: {},
+      data: {songNum: song_number},
       success: function(data, textStatus, jqXHR) {
         // console.log(data);
         // console.log(textStatus);

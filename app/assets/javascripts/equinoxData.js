@@ -1,5 +1,10 @@
 var equinoxData = {
 
+    // unique song id
+    song_number: 1,
+    
+    song_name: "Skrillex - Equinox",
+
     // mappings of sound to key
     mappings:{
         chain1:["c1","a0", "a1", "a2", "a3", "b0", "b1", "b2", "b3", "b3","d8","d12",

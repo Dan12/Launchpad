@@ -114,7 +114,7 @@ h1{
     margin-left: 20px;
 }
 
-#links, #info, #links_button, #info_button, #toggle_editor_container, #editor_container_div{
+.toggle_container, .click_button{
     display: none;
 }
 
@@ -159,4 +159,23 @@ a:hover{
 .sound_pack_button_2{
     display: block;
     margin: 4px auto;
+}
+
+#editor_container_div{
+    margin-top: 16px;
+}
+
+.song_selection{
+    font-size: 20px;
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 10px 6px;
+    border: 1px solid lightgray;
+    border-radius: 2px;
+    transition: all ease 200ms;
+    cursor: pointer;
+}
+
+.song_selection:hover{
+    border-color: gray;
 }

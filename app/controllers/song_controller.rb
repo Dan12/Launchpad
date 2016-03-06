@@ -10,6 +10,7 @@ class SongController < ApplicationController
         render :json => {"data" => @song}
       else
         s = Song.new
+        s.song_number = params[:songNum]
         s.song_data = params[:song_data]
         s.name = params[:name]
         if s.save
@@ -24,6 +25,6 @@ class SongController < ApplicationController
   end
   
   def view_all
-    render :json => {"data" => Song.all}
+    render :json => {"data" => Song.where("cast(song_number as text) LIKE ?", "%#{params[:songNum]}%")}
   end
 end

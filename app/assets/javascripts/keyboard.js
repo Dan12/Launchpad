@@ -7,6 +7,8 @@ var Keyboard_Space = new function(){
     var Keyboard = function(){
         for(var i = 0; i < numChains; i++)
             currentSounds.push([]);
+            
+        currentSongInd = songDatas.indexOf(currentSongData);
         
         this.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
         this.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
@@ -89,17 +91,23 @@ var Keyboard_Space = new function(){
             }
         }
         
-        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_2">^</div>');
-        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_1"><</div>');
-        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_3">v</div>');
-        $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_4">></div>');
-        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
+        $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
         
-        this.touchScreenSetup();
-        
-        this.keyPressSetup();
-        
-        this.initUI();
+        if(!loaded){
+            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_2">^</div>');
+            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_1"><</div>');
+            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_3">v</div>');
+            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_4">></div>');
+            $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
+            
+            this.touchScreenSetup();
+            
+            this.keyPressSetup();
+            
+            this.initUI();
+            
+            loaded = true;
+        }
     }
     
     // setup keypress on document
@@ -294,43 +302,54 @@ var Keyboard_Space = new function(){
         // create new editor and append it to the body element
         BasicMIDI.init("#editor_container_div", this);
         
-        $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
-        
+        // TODO: make this a function
         // info and links buttons
-        $("#info_button").css("display", "inline-block");
-        $("#info_button").click(function(){
-            $("#info").toggle(300,function(){
-                if($("#info").css("display") == "block"){
-                    $("#info_button").css("background-color","lightgray");
-                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
-                }
-            });
-            $("#editor_container_div").css("display","none");
-            $("#links").css("display", "none");
-            $(".click_button").css("background-color","white");
+        $(".click_button").css("display", "inline-block");
+        
+        for(var s in songDatas)
+            $("#songs_container").append("<div class='song_selection' songInd='"+s+"'>"+songDatas[s].song_name+"</div>");
+        $("[songInd='"+currentSongInd+"']").css("background-color","rgb(220,220,220)");
+        
+        var mainObj = this; 
+        
+        $(".song_selection").click(function() {
+            var tempS = parseInt($(this).attr("songInd"));
+            if(tempS != currentSongInd){
+                currentSongInd = tempS
+                currentSongData = songDatas[currentSongInd];
+                $(".song_selection").css("background-color","white");
+                $("[songInd='"+currentSongInd+"']").css("background-color","rgb(220,220,220)");
+                
+                $(".button-row").remove();
+                
+                numSoundsLoaded = 0;
+                mainObj.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
+                mainObj.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
+                mainObj.loadSounds(currentSongData["mappings"]["chain3"], currentSounds[2], 3);
+                mainObj.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
+            }
         });
-        $("#links_button").css("display", "inline-block");
-        $("#links_button").click(function(){
-            $("#links").toggle(300,function(){
-                if($("#links").css("display") == "block"){
-                    $("#links_button").css("background-color","lightgray");
-                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
-                }
-            });
-            $("#editor_container_div").css("display","none");
-            $("#info").css("display", "none");
-            $(".click_button").css("background-color","white");
-        });
-        $("#toggle_editor_container").css("display", "inline-block");
-        $("#toggle_editor_container").click(function(){
-            $("#editor_container_div").toggle(300,function(){
-                if($("#editor_container_div").css("display") == "block"){
-                    $("#toggle_editor_container").css("background-color","lightgray");
-                    $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
-                }
-            });
-            $("#links").css("display","none");
-            $("#info").css("display", "none");
+        
+        $(".click_button").click(function(){
+            var thisObj = this;
+            if($("#"+$(thisObj).attr("toggle_id")).css("display") == "none"){
+                $(".toggle_container").css("display", "none");
+                
+                $("#"+$(thisObj).attr("toggle_id")).toggle(300, function(){
+                    if($("#"+$(thisObj).attr("toggle_id")).css("display") == "block"){
+                        $(thisObj).css("background-color","lightgray");
+                        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+                    }
+                });
+            }
+            else{
+                $("#"+$(thisObj).attr("toggle_id")).toggle(300, function(){
+                    if($("#"+$(thisObj).attr("toggle_id")).css("display") == "block"){
+                        $(thisObj).css("background-color","lightgray");
+                        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
+                    }
+                });
+            }
             $(".click_button").css("background-color","white");
         });
     }
@@ -340,14 +359,14 @@ var Keyboard_Space = new function(){
         var saveNote = [];
         for(var n in notes)
             saveNote.push({"note":notes[n].note, "beat":notes[n].beat, "length":notes[n].length});
-        console.log(saveNote);
-        this.backend.saveSong(JSON.stringify(saveNote), pid, this.editor);
+        //console.log(saveNote);
+        this.backend.saveSong(JSON.stringify(saveNote), pid, this.editor, currentSongData.song_number);
     }
     
     // ask the user for the project they would like to load and then load that project from the server
     // send back a notes array of the loaded project with note,beat,and length and the project id
     Keyboard.prototype.loadNotes = function(){
-        this.backend.loadSongs(this.editor);
+        this.backend.loadSongs(this.editor, currentSongData.song_number);
     }
     
     // TODO: convert keypairs to dictionarys/objects
@@ -378,8 +397,11 @@ var Keyboard_Space = new function(){
     // howl objects for current song
     var currentSounds = [];
     // reference to current song data
+    var songDatas = [equinoxData, animalsData];
+    var currentSongInd = 0;
     var currentSongData = equinoxData;
     // number of chains
     var numChains = 4;
+    var loaded = false;
 
 }
