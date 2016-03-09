@@ -7,7 +7,7 @@ class SongController < ApplicationController
       if @song
         @song.song_data = params[:song_data]
         @song.save
-        render :json => {"data" => @song}
+        render :json => {"data" => @song.id}
       else
         s = Song.new
         s.song_number = params[:songNum]

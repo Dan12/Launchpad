@@ -4,6 +4,8 @@ var equinoxData = {
     song_number: 1,
     
     song_name: "Skrillex - Equinox",
+    
+    bpm:140,
 
     // mappings of sound to key
     mappings:{

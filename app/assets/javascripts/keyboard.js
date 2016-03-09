@@ -22,6 +22,8 @@ var Keyboard_Space = new function(){
     
     Keyboard.prototype.linkEditor = function(editor){
         this.editor = editor;
+        var mainObj = this;
+        setTimeout(function(){mainObj.editor.setBPM(currentSongData.bpm)},500);
     }
     
     // loads sounds from srcArray for given chain into soundArr
@@ -328,6 +330,8 @@ var Keyboard_Space = new function(){
                     
                 mainObj.editor.notesLoaded([],-1);
                 
+                mainObj.editor.setBPM(currentSongData.bpm)
+                
                 numSoundsLoaded = 0;
                 mainObj.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
                 mainObj.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
@@ -403,9 +407,9 @@ var Keyboard_Space = new function(){
     // howl objects for current song
     var currentSounds = [];
     // reference to current song data
-    var songDatas = [equinoxData, animalsData];
+    var songDatas = [equinoxData, animalsData, electroData];
     var currentSongInd = 0;
-    var currentSongData = equinoxData;
+    var currentSongData = electroData;
     // number of chains
     var numChains = 4;
     var loaded = false;
