@@ -407,9 +407,9 @@ var Keyboard_Space = new function(){
     // howl objects for current song
     var currentSounds = [];
     // reference to current song data
-    var songDatas = [equinoxData, animalsData, electroData];
+    var songDatas = [equinoxData, animalsData, electroData, ghetData];
     var currentSongInd = 0;
-    var currentSongData = equinoxData;
+    var currentSongData = ghetData;
     // number of chains
     var numChains = 4;
     var loaded = false;

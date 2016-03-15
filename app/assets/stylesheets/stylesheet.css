@@ -139,9 +139,14 @@ a:hover{
     text-decoration: underline;
 }
 
-.notice{
+#notice{
     max-width: 800px;
     margin: 16px auto 4px;
+}
+
+#info p, #songs_container{
+    max-width: 800px;
+    margin: 20px auto 10px;
 }
 
 .sound_pack_button{
