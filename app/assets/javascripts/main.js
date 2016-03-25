@@ -1,6 +1,5 @@
-//guitar hero launchpad/DDR launchpad
 $(document).ready(function(){
-    var keyboard = Keyboard_Space.initKeyboard();
+    var keyboard = Keyboard_Space.initKeyboard(true);
     
     $(window).resize(function(){
         $(".buttons").css("margin", "0");

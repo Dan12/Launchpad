@@ -1,14 +1,13 @@
 var Keyboard_Space = new function(){
 
-    this.initKeyboard = function(){
+    this.initKeyboard = function(testing){
+        testmode = testing;
         return new Keyboard();
     }
     
     var Keyboard = function(){
         for(var i = 0; i < numChains; i++)
             currentSounds.push([]);
-            
-        currentSongInd = songDatas.indexOf(currentSongData);
         
         this.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
         this.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
@@ -17,9 +16,12 @@ var Keyboard_Space = new function(){
         
         this.backend = BackendSpace.init();
         
+        this.keyboardUI = Keyboard_UI_Space.initKeyboardUI();
+        
         console.log("New keyboard created");
     }
     
+    // link the keyboard and the editor
     Keyboard.prototype.linkEditor = function(editor){
         this.editor = editor;
         var mainObj = this;
@@ -28,17 +30,14 @@ var Keyboard_Space = new function(){
     
     // loads sounds from srcArray for given chain into soundArr
     Keyboard.prototype.loadSounds = function(srcArr, soundArr, chain){
-        for(var i = 0; i < srcArr.length; i++){
+        for(var i = 0; i < srcArr.length; i++)
             soundArr.push(null);
-        }
     
         for(var i = 0; i < srcArr.length; i++){
-            if(srcArr[i] == ""){
+            if(srcArr[i] == "")
                 this.checkLoaded();
-            }
-            else{
+            else
                 this.requestSound(i, srcArr, soundArr, chain);
-            }
         }
     }
     
@@ -72,141 +71,66 @@ var Keyboard_Space = new function(){
         numSoundsLoaded++;
         $(".soundPack").html("Loading sounds ("+numSoundsLoaded+"/"+(4*12*numChains)+"). This should only take a few seconds.");
         if(numSoundsLoaded == 4*12*numChains){
-            this.loadKeyboard();
+            this.keyboardUI.loadKeyboard(this, currentSounds, currentSongData, currentSoundPack);
         }
     }
     
-    // creates elements for keyboard and appends them to the document
-    Keyboard.prototype.loadKeyboard = function(){
-        for(var i = 0; i < 4; i++){
-            // create new row
-            $(".buttons").append('<div class="button-row"></div>');
-            // create 12 buttons per row
-            for(var j = 0; j < 12; j++){
-                var press = false;
-                if(currentSongData["holdToPlay"]["chain"+(currentSoundPack+1)].indexOf((i*12+j)) != -1)
-                    press = true;
-                var str = ""+letterPairs[i*12+j];
-                $(".button-row:last").append('<div class="button button-'+(i*12+j)+'" pressure="'+press+'" released="true" buttonnum='+(i*12+j)+'>'+str+'</div>');
-                // holdToPlay coloring, turned off for now
-                //$('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
-            }
-        }
-        
-        $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
-        
-        if(!loaded){
-            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_2">^</div>');
-            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_1"><</div>');
-            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_3">v</div>');
-            $("#sound_pack_buttons").append('<div class="sound_pack_button sound_pack_button_4">></div>');
-            $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
+    Keyboard.prototype.getKeyInd = function(kc){
+        var keyInd = keyPairs.indexOf(kc);
+        if(keyInd == -1)
+            keyInd = backupPairs.indexOf(kc);
             
-            this.touchScreenSetup();
-            
-            this.keyPressSetup();
-            
-            this.initUI();
-            
-            loaded = true;
-        }
-    }
-    
-    // setup keypress on document
-    Keyboard.prototype.keyPressSetup = function(){
-        var thisObj = this;
-        $(document).keydown(function(e){
-            if($("#gray_background").css("display") == "none"){
-                //console.log(e.keyCode);
-                if(thisObj.switchSoundPackCheck(e.keyCode)){
-                    // do nothing
-                    thisObj.playKey(e.keyCode);
-                }
-                else{
-                    if(!(e.ctrlKey || e.metaKey)){
-                        var keyInd = keyPairs.indexOf(e.keyCode);
-                        if(keyInd == -1)
-                            keyInd = backupPairs.indexOf(e.keyCode);
-                        //console.log(keyInd);
-                        //console.log(e.keyCode);
-                        if($(".button-"+(keyInd)+"").attr("released") == "true" && currentSounds[currentSoundPack][keyInd] != null){
-                            thisObj.playKey(e.keyCode);
-                        }
-                        e.preventDefault();
-                    }
-                }
-            }
-        });
-        
-        $(document).keyup(function(e){
-            if($("#gray_background").css("display") == "none"){
-                if(thisObj.switchSoundPackCheck(e.keyCode)){
-                    // do nothing
-                    thisObj.releaseKey(e.keyCode);
-                }
-                else{
-                    if(!(e.ctrlKey || e.metaKey)){
-                        var keyInd = keyPairs.indexOf(e.keyCode);
-                        if(keyInd == -1)
-                            keyInd = backupPairs.indexOf(e.keyCode);
-                        if(currentSounds[currentSoundPack][keyInd] != null)
-                            thisObj.releaseKey(e.keyCode);
-                    }
-                }
-            }
-        });
+        return keyInd;
     }
     
     Keyboard.prototype.switchSoundPackCheck = function(kc){
         // up
         if(kc == 39){
-            currentSoundPack = 3;
-            this.switchSoundPack();
+            this.switchSoundPack(3);
             return true;
         }
         // left
         else if(kc == 37){
-            currentSoundPack = 0;
-            this.switchSoundPack();
+            this.switchSoundPack(0);
             return true;
         }
         // down
         else if(kc == 38){
-            currentSoundPack = 1;
-            this.switchSoundPack();
+            this.switchSoundPack(1);
             return true;
         }
         // right
         else if(kc == 40){
-            currentSoundPack = 2;
-            this.switchSoundPack();
+            this.switchSoundPack(2);
             return true;
         }
     }
     
-    // setup touchscreen, kind of works
-    Keyboard.prototype.touchScreenSetup = function(){
-        var thisObj = this;
-        $(".button").bind("touchstart", function(){
-           var num = parseInt($(this).attr("buttonnum"));
-           thisObj.playKey(keyPairs[num]);
-           event.preventDefault();
-           return false;
-        });
+    // switch sound pack and update pressures
+    Keyboard.prototype.switchSoundPack = function(sp){
+        // release all keys
+        for(var i = 0; i < 4; i++)
+            for(var j = 0; j < 12; j++)
+                if($(".button-"+(i*12+j)+"").attr("released") == "false")
+                    this.releaseKey(keyPairs[i*12+j]);
         
-        $(".button").bind("touchend", function(){
-           var num = parseInt($(this).attr("buttonnum"));
-           thisObj.releaseKey(keyPairs[num]);
-           event.preventDefault();
-           return false;
-        });
+        // set the new soundpack
+        currentSoundPack = sp;
         
-        $(".button").bind("touchcancel", function(){
-           var num = parseInt($(this).attr("buttonnum"));
-           thisObj.releaseKey(keyPairs[num]);
-           event.preventDefault();
-           return false;
-        });
+        $(".sound_pack_button").css("background-color","white");
+        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
+        $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
+        // set pressures for buttons in new sound pack
+        for(var i = 0; i < 4; i++){
+            for(var j = 0; j < 12; j++){
+                var press = false;
+                if(currentSongData["holdToPlay"]["chain"+(currentSoundPack+1)].indexOf((i*12+j)) != -1)
+                    press = true;
+                $('.button-'+(i*12+j)+'').attr("pressure", ""+press+"");
+                // holdToPlay coloring, turned off for now
+                //$('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
+            }
+        }
     }
     
     // key released
@@ -223,15 +147,19 @@ var Keyboard_Space = new function(){
             // do nothing
         }
         else{
-            var kcInd = keyPairs.indexOf(kc);
-            if(kcInd == -1)
-                kcInd = backupPairs.indexOf(kc);
+            var kcInd = this.getKeyInd(kc);
             if(currentSounds[currentSoundPack][kcInd] != null){
                 if($(".button-"+(kcInd)+"").attr("pressure") == "true")
                     currentSounds[currentSoundPack][kcInd].stop();
                 $(".button-"+(kcInd)+"").attr("released","true");
                 // holdToPlay coloring, turned off for now
-                $(".button-"+(kcInd)+"").css("background-color", "white");
+
+                // Removes Style Attribute to clean up HTML
+                $(".button-"+(kcInd)+"").removeAttr("style");
+
+                if($(".button-"+(kcInd)+"").hasClass("pressed") == true)
+                	$(".button-"+(kcInd)+"").removeClass("pressed");
+
                 //$(".button-"+(kcInd)+"").css("background-color", $(".button-"+(kcInd)+"").attr("pressure") == "true" ? "lightgray" : "white");
             }
         }
@@ -252,9 +180,7 @@ var Keyboard_Space = new function(){
             // do nothing
         }
         else{
-            var kcInd = keyPairs.indexOf(kc);
-            if(kcInd == -1)
-                kcInd = backupPairs.indexOf(kc);
+            var kcInd = this.getKeyInd(kc);
             if(currentSounds[currentSoundPack][kcInd] != null){
                 currentSounds[currentSoundPack][kcInd].stop();
                 currentSounds[currentSoundPack][kcInd].play();
@@ -276,25 +202,9 @@ var Keyboard_Space = new function(){
                 });
                 
                 // set button color and attribute
+                $(".button-"+(kcInd)+"").addClass("pressed");
                 $(".button-"+(kcInd)+"").attr("released","false");
-                $(".button-"+(kcInd)+"").css("background-color","rgb(255,160,0)");
-            }
-        }
-    }
-    
-    // switch sound pack and update pressures
-    Keyboard.prototype.switchSoundPack = function(){
-        $(".sound_pack_button").css("background-color","white");
-        $(".sound_pack_button_"+(currentSoundPack+1)).css("background-color","rgb(255,160,0)");
-        $(".soundPack").html("Sound Pack: "+(currentSoundPack+1));
-        for(var i = 0; i < 4; i++){
-            for(var j = 0; j < 12; j++){
-                var press = false;
-                if(currentSongData["holdToPlay"]["chain"+(currentSoundPack+1)].indexOf((i*12+j)) != -1)
-                    press = true;
-                $('.button-'+(i*12+j)+'').attr("pressure", ""+press+"");
-                // holdToPlay coloring, turned off for now
-                //$('.button-'+(i*12+j)+'').css("background-color", $('.button-'+(i*12+j)+'').attr("pressure") == "true" ? "lightgray" : "white");
+                //$(".button-"+(kcInd)+"").css("background-color","rgb(255,160,0)");
             }
         }
     }
@@ -302,11 +212,13 @@ var Keyboard_Space = new function(){
     // shows and formats all of the UI elements
     Keyboard.prototype.initUI = function(){
         // create new editor and append it to the body element
-        BasicMIDI.init("#editor_container_div", this);
+        if(testmode)
+            BasicMIDI.init("#editor_container_div", this);
+        else
+            MIDI_Editor.init("#editor_container_div", this);
         
-        // TODO: make this a function
         // info and links buttons
-        $(".click_button").css("display", "inline-block");
+        // $(".click_button").css("display", "inline-block");
         
         for(var s in songDatas)
             $("#songs_container").append("<div class='song_selection' songInd='"+s+"'>"+songDatas[s].song_name+"</div>");
@@ -339,29 +251,6 @@ var Keyboard_Space = new function(){
                 mainObj.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
             }
         });
-        
-        $(".click_button").click(function(){
-            var thisObj = this;
-            if($("#"+$(thisObj).attr("toggle_id")).css("display") == "none"){
-                $(".toggle_container").css("display", "none");
-                
-                $("#"+$(thisObj).attr("toggle_id")).toggle(300, function(){
-                    if($("#"+$(thisObj).attr("toggle_id")).css("display") == "block"){
-                        $(thisObj).css("background-color","lightgray");
-                        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
-                    }
-                });
-            }
-            else{
-                $("#"+$(thisObj).attr("toggle_id")).toggle(300, function(){
-                    if($("#"+$(thisObj).attr("toggle_id")).css("display") == "block"){
-                        $(thisObj).css("background-color","lightgray");
-                        $("html, body").animate({ scrollTop: $(document).height()-$(window).height() }, 300);
-                    }
-                });
-            }
-            $(".click_button").css("background-color","white");
-        });
     }
     
     // send request to server to save the notes to the corresponding projectId (pid)
@@ -379,27 +268,6 @@ var Keyboard_Space = new function(){
         this.backend.loadSongs(this.editor, currentSongData.song_number);
     }
     
-    // TODO: convert keypairs to dictionarys/objects
-    // {49:0,50:1,51:2...}
-    
-    // ascii key mappings to array index
-    var keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
-                    81,87,69,82,84,89,85,73,79,80,219,221,
-                    65,83,68,70,71,72,74,75,76,186,222,13,
-                    90,88,67,86,66,78,77,188,190,191,16,-1];
-                
-    // alternate keys for firefox
-    var backupPairs = [49,50,51,52,53,54,55,56,57,48,173,61,
-                       81,87,69,82,84,89,85,73,79,80,219,221,
-                       65,83,68,70,71,72,74,75,76,59,222,13,
-                       90,88,67,86,66,78,77,188,190,191,16,-1];
-                   
-    // letter to show in each button
-    var letterPairs = ["1","2","3","4","5","6","7","8","9","0","-","=",
-                       "Q","W","E","R","T","Y","U","I","O","P","[","]",
-                       "A","S","D","F","G","H","J","K","L",";","'","\\n",
-                       "Z","X","C","V","B","N","M",",",".","/","\\s","NA"];
-    
     // current soundpack (0-3)
     var currentSoundPack = 0;
     // number of sounds loaded
@@ -412,6 +280,26 @@ var Keyboard_Space = new function(){
     var currentSongData = equinoxData;
     // number of chains
     var numChains = 4;
-    var loaded = false;
+    
+    var testmode = false;
 
 }
+
+// Global Variables
+// ascii key mappings to array index
+var keyPairs = [49,50,51,52,53,54,55,56,57,48,189,187,
+                81,87,69,82,84,89,85,73,79,80,219,221,
+                65,83,68,70,71,72,74,75,76,186,222,13,
+                90,88,67,86,66,78,77,188,190,191,16,-1];
+            
+// alternate keys for firefox
+var backupPairs = [49,50,51,52,53,54,55,56,57,48,173,61,
+                   81,87,69,82,84,89,85,73,79,80,219,221,
+                   65,83,68,70,71,72,74,75,76,59,222,13,
+                   90,88,67,86,66,78,77,188,190,191,16,-1];
+               
+// letter to show in each button
+var letterPairs = ["1","2","3","4","5","6","7","8","9","0","-","=",
+                   "Q","W","E","R","T","Y","U","I","O","P","[","]",
+                   "A","S","D","F","G","H","J","K","L",";","'","\\n",
+                   "Z","X","C","V","B","N","M",",",".","/","\\s","NA"];
