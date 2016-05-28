@@ -105,7 +105,7 @@ var Keyboard_UI_Space = new function(){
                 keyboard.playKey(e.keyCode);
             }
             else{
-                if(!(e.ctrlKey || e.metaKey)){
+                if(!(e.ctrlKey || e.metaKey) && $("#login_form").css("display") != "block"){
                     // var keyInd = keyPairs.indexOf(e.keyCode);
                     // if(keyInd == -1)
                     //     keyInd = backupPairs.indexOf(e.keyCode);
@@ -126,7 +126,7 @@ var Keyboard_UI_Space = new function(){
                 keyboard.releaseKey(e.keyCode);
             }
             else{
-                if(!(e.ctrlKey || e.metaKey)){
+                if(!(e.ctrlKey || e.metaKey) && $("#login_form").css("display") != "block"){
                     // var keyInd = keyPairs.indexOf(e.keyCode);
                     // if(keyInd == -1)
                     //     keyInd = backupPairs.indexOf(e.keyCode);
