@@ -283,7 +283,7 @@ var Keyboard_Space = new function(){
     // reference to current song data
     var songDatas = [equinoxData, animalsData, electroData, ghetData, kyotoData];
     var currentSongInd = 0;
-    var currentSongData = kyotoData;
+    var currentSongData = equinoxData;
     // number of chains
     var numChains = 4;
     
