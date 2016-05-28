@@ -47,7 +47,7 @@ var Keyboard_Space = new function(){
     Keyboard.prototype.requestSound = function(i, srcArr, soundArr, chain){
         var thisObj = this;
         setTimeout(function(){
-            //console.log(i+","+chain+","+srcArr[i]+","+soundUrls["chain"+chain][srcArr[i]]);
+            // console.log(i+","+chain+","+srcArr[i]+","+currentSongData["soundUrls"]["chain"+chain][srcArr[i]]);
             soundArr[i] = new Howl({
                 // for online version
                 urls: [currentSongData["soundUrls"]["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
@@ -71,7 +71,7 @@ var Keyboard_Space = new function(){
         numSoundsLoaded++;
         $(".soundPack").html("Loading sounds ("+numSoundsLoaded+"/"+(4*12*numChains)+"). This should only take a few seconds.");
         if(numSoundsLoaded == 4*12*numChains){
-            this.keyboardUI.loadKeyboard(this, currentSounds, currentSongData, currentSoundPack);
+            this.keyboardUI.loadKeyboard(this, currentSongData, currentSoundPack);
         }
     }
     
@@ -136,10 +136,13 @@ var Keyboard_Space = new function(){
     // key released
     // stop playing sound if holdToPlay
     Keyboard.prototype.releaseKey = function(kc){
-        this.midiKeyUp(kc);
-        
-        // send key code to MIDI editor
-        this.editor.recordKeyUp(kc);
+        var keyInd = this.getKeyInd(kc);
+        if(currentSounds[currentSoundPack][keyInd] != null){
+            this.midiKeyUp(kc);
+            
+            // send key code to MIDI editor
+            this.editor.recordKeyUp(kc);
+        }
     }
     
     Keyboard.prototype.midiKeyUp = function(kc){
@@ -169,10 +172,13 @@ var Keyboard_Space = new function(){
     // stopping all sounds in key's linkedArea
     // and then playing sound
     Keyboard.prototype.playKey = function(kc){
-        this.midiKeyDown(kc);
-        
-        // send key code to midi editor
-        this.editor.recordKeyDown(kc);
+        var keyInd = this.getKeyInd(kc);
+        if(currentSounds[currentSoundPack][keyInd] != null){
+            this.midiKeyDown(kc);
+            
+            // send key code to midi editor
+            this.editor.recordKeyDown(kc);
+        }
     }
     
     Keyboard.prototype.midiKeyDown = function(kc){
@@ -275,9 +281,9 @@ var Keyboard_Space = new function(){
     // howl objects for current song
     var currentSounds = [];
     // reference to current song data
-    var songDatas = [equinoxData, animalsData, electroData, ghetData];
+    var songDatas = [equinoxData, animalsData, electroData, ghetData, kyotoData];
     var currentSongInd = 0;
-    var currentSongData = equinoxData;
+    var currentSongData = kyotoData;
     // number of chains
     var numChains = 4;
     

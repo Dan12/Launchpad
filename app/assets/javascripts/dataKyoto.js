@@ -19,15 +19,15 @@ var kyotoData = {
                 "a4","c10","","","","","","",  "b13","",   "b15","",
                 "a7","",   "","","","","","",  "",   "",   "",   ""],
         
-        chain3:["","","","","","","","","","","","",
-                "","","","","","","","","","","","",
-                "","","","","","","","","","","","",
-                "","","","","","","","","","","",""],
+        chain3:["a1", "a2","a4", "a7", "",   "b5", "b6", "b7", "d0","d1","d2", "d3",
+                "a15","",  "",   "",   "",   "b9", "b10","",   "",  "d5","e2", "",
+                "",   "",  "c10","",   "b12","e0","b13", "b15","",  "",  "d10","",
+                "c12","",  "",   "c15","",   "e1","b14", "",   "",  "",  "",   ""],
         
-        chain4:["","","","","","","","","","","","",
-                "","","","","","","","","","","","",
-                "","","","","","","","","","","","",
-                "","","","","","","","","","","",""]
+        chain4:["a1", "a2","a4", "a7", "b0", "",   "b2", "b3", "",   "d0","e0","", 
+                "a15","",  "",   "",   "b4", "b5", "b6", "b7", "d15","d2","e2","",   
+                "",   "",  "c10","",   "b8", "b9", "b10","b11","d8", "d1","e1","",
+                "c12","",  "",   "c15","b12","b13","b14","b15","",   "d3","e3",""]
     },
     
     // which keys need to be held to play through
@@ -150,7 +150,7 @@ var kyotoData = {
       b14:"https://www.dropbox.com/s/ce23p2i6quj4o9i/b14.mp3?dl=0",
       b15:"https://www.dropbox.com/s/dxpdqghsh38cdte/b15.mp3?dl=0",
       c10:"https://www.dropbox.com/s/7kw84p1w0tcvrwt/c10.mp3?dl=0",
-      c12:"https://www.dropbox.com/s/7kw84p1w0tcvrwt/c10.mp3?dl=0",
+      c12:"https://www.dropbox.com/s/ozs5gbtwtw2nuxr/c12.mp3?dl=0",
       c13:"https://www.dropbox.com/s/63azqelw4xbduqe/c13.mp3?dl=0",
       c15:"https://www.dropbox.com/s/yvt9eirzzxbhgvr/c15.mp3?dl=0",
       d0:"https://www.dropbox.com/s/z9ru2pj9prg8nbp/d0.mp3?dl=0",

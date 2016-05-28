@@ -59,7 +59,7 @@ var Keyboard_UI_Space = new function(){
     }
     
     // creates elements for keyboard and appends them to the document
-    KeyboardUI.prototype.loadKeyboard = function(keyboard, currentSounds, currentSongData, currentSoundPack){
+    KeyboardUI.prototype.loadKeyboard = function(keyboard, currentSongData, currentSoundPack){
         for(var i = 0; i < 4; i++){
             // create new row
             $(".buttons").append('<div class="button-row"></div>');
@@ -86,7 +86,7 @@ var Keyboard_UI_Space = new function(){
             
             this.touchScreenSetup(keyboard);
             
-            this.keyPressSetup(keyboard, currentSounds, currentSoundPack);
+            this.keyPressSetup(keyboard);
             
             keyboard.initUI();
             
@@ -97,7 +97,7 @@ var Keyboard_UI_Space = new function(){
     }
     
     // setup keypress on document
-    KeyboardUI.prototype.keyPressSetup = function(keyboard, currentSounds, currentSoundPack){
+    KeyboardUI.prototype.keyPressSetup = function(keyboard){
         $(document).keydown(function(e){
             //console.log(e.keyCode);
             if(keyboard.switchSoundPackCheck(e.keyCode)){
@@ -110,9 +110,10 @@ var Keyboard_UI_Space = new function(){
                     // if(keyInd == -1)
                     //     keyInd = backupPairs.indexOf(e.keyCode);
                     var keyInd = keyboard.getKeyInd(e.keyCode);
-                    //console.log(keyInd);
-                    //console.log(e.keyCode);
-                    if($(".button-"+(keyInd)+"").attr("released") == "true" && currentSounds[currentSoundPack][keyInd] != null){
+                    // console.log(keyInd);
+                    // console.log(e.keyCode);
+                    // console.log($(".button-"+(keyInd)+"").attr("released"));
+                    if($(".button-"+(keyInd)+"").attr("released") == "true"){
                         keyboard.playKey(e.keyCode);
                     }
                     e.preventDefault();
@@ -130,9 +131,7 @@ var Keyboard_UI_Space = new function(){
                     // var keyInd = keyPairs.indexOf(e.keyCode);
                     // if(keyInd == -1)
                     //     keyInd = backupPairs.indexOf(e.keyCode);
-                    var keyInd = keyboard.getKeyInd(e.keyCode);
-                    if(currentSounds[currentSoundPack][keyInd] != null)
-                        keyboard.releaseKey(e.keyCode);
+                    keyboard.releaseKey(e.keyCode);
                 }
             }
         });
