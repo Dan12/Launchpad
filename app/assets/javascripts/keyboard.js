@@ -71,6 +71,7 @@ var Keyboard_Space = new function(){
         numSoundsLoaded++;
         $(".soundPack").html("Loading sounds ("+numSoundsLoaded+"/"+(4*12*numChains)+"). This should only take a few seconds.");
         if(numSoundsLoaded == 4*12*numChains){
+            loadingSongs = false;
             this.keyboardUI.loadKeyboard(this, currentSongData, currentSoundPack);
         }
     }
@@ -234,7 +235,8 @@ var Keyboard_Space = new function(){
         
         $(".song_selection").click(function() {
             var tempS = parseInt($(this).attr("songInd"));
-            if(tempS != currentSongInd){
+            if(tempS != currentSongInd && !loadingSongs){
+                loadingSongs = true;
                 currentSongInd = tempS
                 currentSongData = songDatas[currentSongInd];
                 $(".song_selection").css("background-color","white");
@@ -281,13 +283,15 @@ var Keyboard_Space = new function(){
     // howl objects for current song
     var currentSounds = [];
     // reference to current song data
-    var songDatas = [equinoxData, animalsData, electroData, ghetData, kyotoData];
+    var songDatas = [equinoxData, animalsData, electroData, ghetData, kyotoData, aeroData];
     var currentSongInd = 0;
     var currentSongData = equinoxData;
     // number of chains
     var numChains = 4;
     
     var testmode = false;
+    
+    var loadingSongs = true;
 
 }
 
