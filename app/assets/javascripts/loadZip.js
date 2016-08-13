@@ -30,7 +30,7 @@ var Zip_Space = new function(){
   this.loadZip = function(name, callback){
     this.dataArray = {};
     var xhr = new XMLHttpRequest()
-    xhr.open("GET", `zip/sounds/${name}.zip`)
+    xhr.open("GET", 'zip/sounds/'+name+'.zip')
     xhr.responseType = "blob"
     xhr.onload = function(){
         // console.log(xhr.response)

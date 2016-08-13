@@ -53,7 +53,7 @@ var Keyboard_Space = new function(){
             // console.log(i+","+chain+","+srcArr[i]+","+currentSongData["soundUrls"]["chain"+chain][srcArr[i]]);
             soundArr[i] = new Howl({
                 // for online version
-                src: [Zip_Space.dataArray[`sounds/chain${chain}/${srcArr[i]}.mp3`]],
+                src: [Zip_Space.dataArray['sounds/chain'+chain+'/'+srcArr[i]+'.mp3']],
                 // old
                 // urls: [currentSongData["soundUrls"]["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
                 // for offline version
@@ -62,9 +62,9 @@ var Keyboard_Space = new function(){
                     thisObj.checkLoaded();
                 },
                 onloaderror: function(id, error){
-                    console.log(`error: ${id}`)
+                    console.log('error: '+id)
                     console.log(error);
-                    console.log(`sounds/chain${chain}/${srcArr[i]}.mp3`);
+                    console.log('sounds/chain'+chain+'/'+srcArr[i]+'.mp3');
                     // console.log("audio/chain"+chain+"/"+srcArr[i]+".mp3");
                     // console.log(i+","+chain+","+srcArr[i]+","+currentSongData["soundUrls"]["chain"+chain][srcArr[i]]);
                     $("#error_msg").html("There was an error. Please reload the page");
