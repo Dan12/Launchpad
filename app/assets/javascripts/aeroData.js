@@ -6,11 +6,13 @@ var aeroData = {
     song_name: "Aero Chord - Surface",
     
     bpm:170,
+    
+    filename: 'aero',
   
     // mappings of sound to key
     mappings:{
         chain1:["b0", "b1", "b2", "b3", "c0", "a0", "",   "c3", "d0", "d1", "d2", "d3",
-                "b4", "",   "",   "b7", "c4", "c5", "c6", "c7", "d4", "",   "",   "d7",
+                "",   "",   "",   "b7", "c4", "c5", "c6", "c7", "d4", "",   "",   "d7",
                 "",   "b9", "b10","b11","c8", "c9", "c10","c11","",   "d9", "d10","",
                 "b12","b13","b14","b15","c12","c13","c14","c15","d12","d13","d14",""],
                 

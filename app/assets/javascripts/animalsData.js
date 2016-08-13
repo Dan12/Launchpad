@@ -6,6 +6,8 @@ var animalsData = {
     song_name: "Martin Garrix - Animals",
     
     bpm:128,
+    
+    filename: 'animals',
   
     // mappings of sound to key
     mappings:{

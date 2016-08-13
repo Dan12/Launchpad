@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    Zip_Space.initialize();
+    
     var keyboard = Keyboard_Space.initKeyboard(true);
     
     $(window).resize(function(){

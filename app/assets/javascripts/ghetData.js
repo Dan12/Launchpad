@@ -6,6 +6,8 @@ var ghetData = {
     song_name: "GHET1 - Knife Party vs Skrillex",
     
     bpm:176, 
+    
+    filename: 'ghet',
 
     // mappings of sound to key
     mappings:{

@@ -8,17 +8,20 @@ var Keyboard_Space = new function(){
     var Keyboard = function(){
         for(var i = 0; i < numChains; i++)
             currentSounds.push([]);
-        
-        this.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
-        this.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
-        this.loadSounds(currentSongData["mappings"]["chain3"], currentSounds[2], 3);
-        this.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
-        
-        this.backend = BackendSpace.init();
-        
-        this.keyboardUI = Keyboard_UI_Space.initKeyboardUI();
-        
-        console.log("New keyboard created");
+            
+        var this_obj = this;
+        Zip_Space.loadZip(currentSongData["filename"], function() {
+            this_obj.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
+            this_obj.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
+            this_obj.loadSounds(currentSongData["mappings"]["chain3"], currentSounds[2], 3);
+            this_obj.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
+            
+            this_obj.backend = BackendSpace.init();
+            
+            this_obj.keyboardUI = Keyboard_UI_Space.initKeyboardUI();
+            
+            console.log("New keyboard created");  
+        })
     }
     
     // link the keyboard and the editor
@@ -46,30 +49,35 @@ var Keyboard_Space = new function(){
     // if online version, gets from dropbox
     Keyboard.prototype.requestSound = function(i, srcArr, soundArr, chain){
         var thisObj = this;
-        setTimeout(function(){
+        // setTimeout(function(){
             // console.log(i+","+chain+","+srcArr[i]+","+currentSongData["soundUrls"]["chain"+chain][srcArr[i]]);
             soundArr[i] = new Howl({
                 // for online version
-                urls: [currentSongData["soundUrls"]["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
+                src: [Zip_Space.dataArray[`sounds/chain${chain}/${srcArr[i]}.mp3`]],
+                // old
+                // urls: [currentSongData["soundUrls"]["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
                 // for offline version
                 // urls: ["audio/chain"+chain+"/"+srcArr[i]+".mp3"],
                 onload: function(){
                     thisObj.checkLoaded();
                 },
-                onloaderror: function(){
-                    console.log("audio/chain"+chain+"/"+srcArr[i]+".mp3");
-                    console.log(i+","+chain+","+srcArr[i]+","+currentSongData["soundUrls"]["chain"+chain][srcArr[i]]);
+                onloaderror: function(id, error){
+                    console.log(`error: ${id}`)
+                    console.log(error);
+                    console.log(`sounds/chain${chain}/${srcArr[i]}.mp3`);
+                    // console.log("audio/chain"+chain+"/"+srcArr[i]+".mp3");
+                    // console.log(i+","+chain+","+srcArr[i]+","+currentSongData["soundUrls"]["chain"+chain][srcArr[i]]);
                     $("#error_msg").html("There was an error. Please reload the page");
                 }
             });
-        },i*50);
+        // },i*50);
     }
     
     // checks if all of the sounds have loaded
     // if they have, load the keyboard
     Keyboard.prototype.checkLoaded = function(){
         numSoundsLoaded++;
-        $(".soundPack").html("Loading sounds ("+numSoundsLoaded+"/"+(4*12*numChains)+"). This should only take a few seconds.");
+        $(".soundPack").html("Loading sounds ("+numSoundsLoaded+"/"+(4*12*numChains)+")");
         if(numSoundsLoaded == 4*12*numChains){
             loadingSongs = false;
             this.keyboardUI.loadKeyboard(this, currentSongData, currentSoundPack);
@@ -253,10 +261,13 @@ var Keyboard_Space = new function(){
                 mainObj.editor.setBPM(currentSongData.bpm)
                 
                 numSoundsLoaded = 0;
-                mainObj.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
-                mainObj.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
-                mainObj.loadSounds(currentSongData["mappings"]["chain3"], currentSounds[2], 3);
-                mainObj.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
+                Zip_Space.loadZip(currentSongData["filename"], function() {
+                    mainObj.loadSounds(currentSongData["mappings"]["chain1"], currentSounds[0], 1);
+                    mainObj.loadSounds(currentSongData["mappings"]["chain2"], currentSounds[1], 2);
+                    mainObj.loadSounds(currentSongData["mappings"]["chain3"], currentSounds[2], 3);
+                    mainObj.loadSounds(currentSongData["mappings"]["chain4"], currentSounds[3], 4);
+                })
+                
             }
         });
     }

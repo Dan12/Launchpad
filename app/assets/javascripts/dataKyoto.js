@@ -6,6 +6,8 @@ var kyotoData = {
     song_name: "Skrillex - Kyoto",
     
     bpm:175,
+    
+    filename: 'kyoto',
   
     // mappings of sound to key
     mappings:{

@@ -6,6 +6,8 @@ var electroData = {
     song_name: "SUBFER - Electro Mashup",
     
     bpm:128,
+    
+    filename: 'electro',
   
     // mappings of sound to key
     mappings:{
