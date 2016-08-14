@@ -31,6 +31,10 @@ var Keyboard_Space = new function(){
         setTimeout(function(){mainObj.editor.setBPM(currentSongData.bpm)},500);
     }
     
+    Keyboard.prototype.getCurrentSounds = function(){
+        return currentSounds;
+    }
+    
     // loads sounds from srcArray for given chain into soundArr
     Keyboard.prototype.loadSounds = function(srcArr, soundArr, chain){
         for(var i = 0; i < srcArr.length; i++)
@@ -51,7 +55,7 @@ var Keyboard_Space = new function(){
         var thisObj = this;
         soundArr[i] = new Howl({
             // for online version
-            src: [Zip_Space.dataArray['sounds/chain'+chain+'/'+srcArr[i]+'.mp3']],
+            urls: [Zip_Space.dataArray['sounds/chain'+chain+'/'+srcArr[i]+'.mp3']],
             // old
             // urls: [currentSongData["soundUrls"]["chain"+chain][srcArr[i]].replace("www.dropbox.com","dl.dropboxusercontent.com").replace("?dl=0","")],
             // for offline version
@@ -247,6 +251,12 @@ var Keyboard_Space = new function(){
                 
                 $(".button-row").remove();
                 
+                for(var i = 0; i < currentSounds.length; i++){
+                    for(var k = 0; k < currentSounds[i].length; k++){
+                        if(currentSounds[i][k] != null)
+                            currentSounds[i][k].unload();
+                    }
+                }
                 currentSounds = [];
                 for(var i = 0; i < numChains; i++)
                     currentSounds.push([]);
