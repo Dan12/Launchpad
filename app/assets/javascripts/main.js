@@ -8,8 +8,12 @@ $(document).ready(function(){
         var margin = (($("body").innerWidth()-$(".buttons").width()-30)/2);
         if(margin < 0)
             margin = 0;
-        $(".buttons").css("margin","0 "+margin+"px");
+        if(margin < 180)
+            margin = 180;
+        $(".buttons").css("padding","0 "+margin+"px");
     });
+    
+    adMessage();
     
 });
 

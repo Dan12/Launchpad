@@ -227,9 +227,9 @@ var Keyboard_Space = new function(){
     Keyboard.prototype.initUI = function(){
         // create new editor and append it to the body element
         if(testmode)
-            BasicMIDI.init("#editor_container_div", this);
+            BasicMIDI.init("#editor_container_div", this, 170);
         else
-            MIDI_Editor.init("#editor_container_div", this);
+            MIDI_Editor.init("#editor_container_div", this, 170);
         
         // info and links buttons
         // $(".click_button").css("display", "inline-block");

@@ -206,3 +206,23 @@ a:hover{
 .song_selection:hover{
     border-color: gray;
 }
+
+#left_ad {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+#right_ad {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+#content_wrapper {
+    position: relative;
+    height: 100%;
+    width: auto;
+    min-width: 100%;
+    display: inline-block;
+}
