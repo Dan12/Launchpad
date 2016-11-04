@@ -209,13 +209,13 @@ a:hover{
 
 #left_ad {
     position: absolute;
-    bottom: 10px;
+    top: 10px;
     left: 10px;
 }
 
 #right_ad {
     position: absolute;
-    bottom: 10px;
+    top: 10px;
     right: 10px;
 }
 

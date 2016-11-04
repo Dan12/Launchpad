@@ -32,6 +32,8 @@ var Keyboard_UI_Space = new function(){
             }
             $(".click_button").css("background-color","white");
         });
+        
+        $("#left_ad, #right_ad").css({"bottom":"10px","top":"auto"});
     }
     
     // setup touchscreen, kind of works
