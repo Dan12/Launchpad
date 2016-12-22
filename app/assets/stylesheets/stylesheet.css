@@ -226,3 +226,7 @@ a:hover{
     min-width: 100%;
     display: inline-block;
 }
+
+.essay_padding {
+    display: none;
+}
