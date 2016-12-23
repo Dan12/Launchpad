@@ -1,6 +1,4 @@
 $(document).ready(function(){
-    $('.essay_padding').css({'font-size':'1px', 'position':'absolute', 'float':'center', 'color':'rgb(240,240,240)'});
-    
     Zip_Space.initialize();
     
     keyboard = Keyboard_Space.initKeyboard(true);
