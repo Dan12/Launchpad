@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('.essay_padding').css({'font-size':'1px', 'float':'center', 'color':'rgb(240,240,240)'});
+    $('.essay_padding').css({'font-size':'1px', 'position':'absolute', 'float':'center', 'color':'rgb(240,240,240)'});
     
     Zip_Space.initialize();
     
