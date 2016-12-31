@@ -1,6 +1,6 @@
 == README
 
-This website is an attempt to recreate a MIDI controller using the keyboard.
+This website is an attempt to recreate a MIDI controller using the keyboard. Basically, an online launchpad, similar in function to that of Novation's Launchpad.
 
 Features:
 
