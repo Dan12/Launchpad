@@ -13,7 +13,7 @@ $(document).ready(function(){
         $(".buttons").css("padding","0 "+margin+"px");
     });
     
-    adMessage();
+    // adMessage();
     
 });
 
