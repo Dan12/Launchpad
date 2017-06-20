@@ -49,7 +49,7 @@ var Zip_Space = new function(){
           });
         }, function(error) {
           console.log(error);
-          $("#error_msg").html("There was a critical error. Please check back later.");
+          $("#error_msg").html("There was a critical error. Try clearing your browser's cache or check back later.");
         });
     }
     xhr.send()

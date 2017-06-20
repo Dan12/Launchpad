@@ -67,7 +67,7 @@ var Keyboard_Space = new function(){
                 console.log('error: '+id)
                 console.log(error);
                 console.log('sounds/chain'+chain+'/'+srcArr[i]+'.mp3');
-                $("#error_msg").html("There was an error. Please reload the page");
+                $("#error_msg").html("There was an error. Please try clearing your browser's cache and reload the page.");
             }
         });
     }
