@@ -39,6 +39,9 @@ var Keyboard_UI_Space = new function(){
     // setup touchscreen, kind of works
     KeyboardUI.prototype.touchScreenSetup = function(keyboard){
         $(".button").bind("touchstart", function(){
+            if (Howler.ctx.state != "running") {
+                Howler.ctx.resume();
+            }
            var num = parseInt($(this).attr("buttonnum"));
            keyboard.playKey(keyPairs[num]);
            event.preventDefault();
@@ -101,6 +104,9 @@ var Keyboard_UI_Space = new function(){
     // setup keypress on document
     KeyboardUI.prototype.keyPressSetup = function(keyboard){
         $(document).keydown(function(e){
+            if (Howler.ctx.state != "running") {
+                Howler.ctx.resume();
+            }
             //console.log(e.keyCode);
             if(keyboard.switchSoundPackCheck(e.keyCode)){
                 // do nothing
