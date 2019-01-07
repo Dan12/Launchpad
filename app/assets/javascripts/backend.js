@@ -36,6 +36,8 @@ var BackendSpace = new function(){
   }
   
   BackendComm.prototype.saveSong = function(notes, pid, editor, song_number){
+    alert("Saving songs not yet supported");
+    /*
     var loadSongName = "";
     setTimeout(function(){
       if(pid == -1)
@@ -68,6 +70,7 @@ var BackendSpace = new function(){
         }
       });
     },100);
+    */
   }
   
   BackendComm.prototype.loadSongs = function(editor, song_number){
