@@ -26,7 +26,7 @@ The easiest way to install the Launchpad on your won server is by using docker.
 
 ```bash
 # First, clone the repository
-git pull https://github.com/Dan12/Launchpad.git
+git pull https://github.com/mazowo/Launchpad.git
 cd Launchpad
 
 # Next, prepare and build the Image
